@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro Network Subsite Helper
 Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-network-subsites/
 Description: Replacement for Paid Memberships Pro meant to be run on a network site, pointing to another network site's PMPro install for membership checks/etc.
-Version: .1
+Version: .2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
@@ -48,8 +48,12 @@ $wpdb->pmpro_memberships_users = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_membersh
 $wpdb->pmpro_membership_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_membership_levels";
 
 //get levels again
-global $membership_levels;
-$membership_levels = $wpdb->get_results( "SELECT * FROM {$wpdb->pmpro_membership_levels}", OBJECT );
+function pmpron_init_get_levels()
+{
+	global $wpdb, $membership_levels;
+	$membership_levels = $wpdb->get_results( "SELECT * FROM {$wpdb->pmpro_membership_levels}", OBJECT );
+}
+add_action('init', 'pmpron_init_get_levels');
 
 /*
 	Hide admin stuff
