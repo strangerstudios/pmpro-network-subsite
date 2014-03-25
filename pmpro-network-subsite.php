@@ -53,7 +53,7 @@ function pmpron_init_get_levels()
 	global $wpdb, $membership_levels;
 	$membership_levels = $wpdb->get_results( "SELECT * FROM {$wpdb->pmpro_membership_levels}", OBJECT );
 }
-add_action('init', 'pmpron_init_get_levels');
+add_action('init', 'pmpron_init_get_levels', 1);
 
 /*
 	Hide admin stuff
