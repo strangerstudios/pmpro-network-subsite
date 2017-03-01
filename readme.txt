@@ -24,6 +24,8 @@ All of the membership levels and users are managed on the main network site. The
 
 You will now be able to create members-only content on subsites in the network. The membership levels of your main site are mirrored in each subsite.
 
+Read full documentation at https://www.paidmembershipspro.com/add-ons/plus-add-ons/pmpro-network-membership/
+
 == Frequently Asked Questions ==
 
 = I found a bug in the plugin. =
