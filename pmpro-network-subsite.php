@@ -1,19 +1,16 @@
 <?php
 /*
-Plugin Name: Paid Memberships Pro Network Subsite Helper
+Plugin Name: Paid Memberships Pro - Multisite Membership Add On
 Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-network-subsites/
-Description: Replacement for Paid Memberships Pro meant to be run on a network site, pointing to another network site's PMPro install for membership checks/etc.
-Version: .4
+Description: Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network.
+Version: .4.1
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
-/*	
-	Copyright 2011	Stranger Studios	(email : jason@strangerstudios.com)	 
-	This code is licensed under the GPLv2.
-*/
 
-if(!defined('PMPRO_NETWORK_MAIN_DB_PREFIX'))
-	define('PMPRO_NETWORK_MAIN_DB_PREFIX', 'wp');
+if( ! defined( 'PMPRO_NETWORK_MAIN_DB_PREFIX' ) ) {
+	define( 'PMPRO_NETWORK_MAIN_DB_PREFIX', 'wp' );
+}
 
 /*
 	Make sure this plugin loads after Paid Memberships Pro
@@ -21,10 +18,10 @@ if(!defined('PMPRO_NETWORK_MAIN_DB_PREFIX'))
 function pmpron_subsite_activated_plugin() {
 	// ensure path to this file is via main wp plugin path
 	$wp_path_to_this_file = preg_replace('/(.*)plugins\/(.*)$/', WP_PLUGIN_DIR."/$2", __FILE__);
-	$this_plugin = plugin_basename(trim($wp_path_to_this_file));
+	$this_plugin = plugin_basename( trim( $wp_path_to_this_file ) );
 	
 	//load plugins
-	$active_plugins = get_option('active_plugins');
+	$active_plugins = get_option( 'active_plugins' );
 	
 	//where am I?
 	$this_plugin_key = array_search($this_plugin, $active_plugins);
@@ -34,9 +31,9 @@ function pmpron_subsite_activated_plugin() {
 	$active_plugins[] = $this_plugin;
 	
 	//update option
-	update_option('active_plugins', $active_plugins);	
+	update_option( 'active_plugins', $active_plugins );
 }
-add_action("activated_plugin", "pmpron_subsite_activated_plugin");
+add_action( 'activated_plugin', 'pmpron_subsite_activated_plugin' );
 
 /*
 	Now update wpdb tables.
@@ -44,28 +41,28 @@ add_action("activated_plugin", "pmpron_subsite_activated_plugin");
 	(Updated again in init to get all cases.)
 */
 global $wpdb;
-$wpdb->pmpro_memberships_users = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_memberships_users";
-$wpdb->pmpro_membership_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_membership_levels";
-$wpdb->pmpro_membership_levelmeta = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_membership_levelmeta";
-$wpdb->pmpro_membership_orders = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_membership_orders";
-$wpdb->pmpro_discount_codes = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_discount_codes";
-$wpdb->pmpro_discount_codes_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_discount_codes_levels";
-$wpdb->pmpro_discount_codes_uses = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_discount_codes_uses";
+$wpdb->pmpro_memberships_users = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_memberships_users';
+$wpdb->pmpro_membership_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_levels';
+$wpdb->pmpro_membership_levelmeta = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_levelmeta';
+$wpdb->pmpro_membership_orders = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_orders';
+$wpdb->pmpro_discount_codes = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes';
+$wpdb->pmpro_discount_codes_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes_levels';
+$wpdb->pmpro_discount_codes_uses = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes_uses';
 
 //get levels again
 function pmpron_init_get_levels() {
 	global $wpdb, $membership_levels;
-	$membership_levels = $wpdb->get_results( "SELECT * FROM {$wpdb->pmpro_membership_levels}", OBJECT );
+	$membership_levels = $wpdb->get_results( 'SELECT * FROM {$wpdb->pmpro_membership_levels}', OBJECT );
 }
-add_action('init', 'pmpron_init_get_levels', 1);
+add_action( 'init', 'pmpron_init_get_levels', 1 );
 
 /*
 	Hide admin stuff
 */
 function pmpron_subsite_init() {
 	//remove admin pages
-	remove_action('admin_menu', 'pmpro_add_pages');
-	remove_action('admin_bar_menu', 'pmpro_admin_bar_menu');
+	remove_action( 'admin_menu', 'pmpro_add_pages' );
+	remove_action( 'admin_bar_menu', 'pmpro_admin_bar_menu' );
 	
 	//remove membership level from edit users page
 	remove_action( 'show_user_profile', 'pmpro_membership_level_profile_fields' );
@@ -74,12 +71,28 @@ function pmpron_subsite_init() {
 	
 	//update wpdb tables again
 	global $wpdb;
-	$wpdb->pmpro_memberships_users = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_memberships_users";
-	$wpdb->pmpro_membership_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_membership_levels";
-	$wpdb->pmpro_membership_levelmeta = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_membership_levelmeta";
-	$wpdb->pmpro_membership_orders = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_membership_orders";
-	$wpdb->pmpro_discount_codes = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_discount_codes";
-	$wpdb->pmpro_discount_codes_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_discount_codes_levels";
-	$wpdb->pmpro_discount_codes_uses = PMPRO_NETWORK_MAIN_DB_PREFIX . "_pmpro_discount_codes_uses";
+	$wpdb->pmpro_memberships_users = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_memberships_users';
+	$wpdb->pmpro_membership_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_levels';
+	$wpdb->pmpro_membership_levelmeta = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_levelmeta';
+	$wpdb->pmpro_membership_orders = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_orders';
+	$wpdb->pmpro_discount_codes = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes';
+	$wpdb->pmpro_discount_codes_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes_levels';
+	$wpdb->pmpro_discount_codes_uses = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes_uses';
 }
-add_action("init", "pmpron_subsite_init", 15);
+add_action( 'init', 'pmpron_subsite_init', 15 );
+
+/*
+	Function to add links to the plugin row meta
+*/
+function pmpron_subsite_plugin_row_meta($links, $file) {
+	if(strpos($file, 'pmpro-network-subsite.php') !== false)
+	{
+		$new_links = array(
+			'<a href="' . esc_url('https://www.paidmembershipspro.com/add-ons/plus-add-ons/pmpro-network-membership/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpron_subsite' ) ) . '">' . __( 'Docs', 'pmpron_subsite' ) . '</a>',
+			'<a href="' . esc_url('http://paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpron_subsite' ) ) . '">' . __( 'Support', 'pmpron_subsite' ) . '</a>',
+		);
+		$links = array_merge($links, $new_links);
+	}
+	return $links;
+}
+add_filter('plugin_row_meta', 'pmpron_subsite_plugin_row_meta', 10, 2);
