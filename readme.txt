@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, network, network membership, multisite, wpmu
 Requires at least: 3.0
-Tested up to: 3.6.1
-Stable tag: .4.1
+Tested up to: 4.8
+Stable tag: .4.2
 
 Manage memberships at the network's main site (the primary domain of the network) and provide/restrict access on subsites in the network.
 
@@ -37,6 +37,10 @@ Please post it in the GitHub issue tracker here: https://github.com/strangerstud
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+
+= .4.2 =
+* BUG: Now hiding the Membership admin bar menu on affected subsites.
+
 = .4.1 =
 * ENHANCEMENT: Improving readme documentation and updating add on name.
 
