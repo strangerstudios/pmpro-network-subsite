@@ -43,7 +43,7 @@ class Manage_Multisite {
 	 */
 	public static function pbrx_load_scripts() {
 		$screen = get_current_screen();
-		if ( 'toplevel_page_pmpro-membership' || 'memberships_page_pmpro-multisite-membership' === $screen->id ) {
+		if ( 'toplevel_page_pmpro-membership' === $screen->id || 'memberships_page_pmpro-multisite-membership' === $screen->id ) {
 			wp_enqueue_style( 'multisite-membership', plugin_dir_url( __FILE__ ) . 'css/multisite-membership.css' );
 		}
 		wp_enqueue_script( 'select-site', plugin_dir_url( __FILE__ ) . 'js/select-site.js', array( 'jquery' ) );
