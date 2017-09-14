@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Paid Memberships Pro - Multisite Membership Add On
+Plugin Name: Paid Memberships Pro - Multisite Membership Add On .4.2
 Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-network-subsites/
 Description: Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network.
-Version: .4.1
+Version: .4.2
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
