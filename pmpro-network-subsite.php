@@ -12,6 +12,9 @@ if( ! defined( 'PMPRO_NETWORK_MAIN_DB_PREFIX' ) ) {
 	define( 'PMPRO_NETWORK_MAIN_DB_PREFIX', 'wp' );
 }
 
+include( 'inc/class-manage-multisite.php' );
+Manage_Multisite::init();
+
 /*
 	Make sure this plugin loads after Paid Memberships Pro
 */
@@ -19,17 +22,17 @@ function pmpron_subsite_activated_plugin() {
 	// ensure path to this file is via main wp plugin path
 	$wp_path_to_this_file = preg_replace('/(.*)plugins\/(.*)$/', WP_PLUGIN_DIR."/$2", __FILE__);
 	$this_plugin = plugin_basename( trim( $wp_path_to_this_file ) );
-	
+
 	//load plugins
 	$active_plugins = get_option( 'active_plugins' );
-	
+
 	//where am I?
 	$this_plugin_key = array_search($this_plugin, $active_plugins);
-	
+
 	//move to end
 	array_splice($active_plugins, $this_plugin_key, 1);
 	$active_plugins[] = $this_plugin;
-	
+
 	//update option
 	update_option( 'active_plugins', $active_plugins );
 }
@@ -37,7 +40,7 @@ add_action( 'activated_plugin', 'pmpron_subsite_activated_plugin' );
 
 /*
 	Now update wpdb tables.
-	
+
 	(Updated again in init to get all cases.)
 */
 global $wpdb;
@@ -63,12 +66,12 @@ function pmpron_subsite_init() {
 	//remove admin pages
 	remove_action( 'admin_menu', 'pmpro_add_pages' );
 	remove_action( 'admin_bar_menu', 'pmpro_admin_bar_menu' );
-	
+
 	//remove membership level from edit users page
 	remove_action( 'show_user_profile', 'pmpro_membership_level_profile_fields' );
 	remove_action( 'edit_user_profile', 'pmpro_membership_level_profile_fields' );
 	remove_action( 'profile_update', 'pmpro_membership_level_profile_fields_update' );
-	
+
 	//update wpdb tables again
 	global $wpdb;
 	$wpdb->pmpro_memberships_users = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_memberships_users';
