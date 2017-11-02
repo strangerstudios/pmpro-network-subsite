@@ -54,18 +54,20 @@ class Manage_Multisite {
 		?>
 		<div class="wrap">
 			<h2><?php esc_attr_e( 'PMPro Multisite Membership', 'selectsite' ); ?></h2>
-			<p>You have activated the Multisite Membership Add On on this site, which means that you will be using PMPro settings from another site in your Network to control site access.</p>
-			<p>In order to finish setting up the Multisite Membership Add On, you'll need to check that you have the proper prefix for the site controlling the settings in wp-config.php.</p>
+			<p>You have activated the <strong>Multisite Membership Add On</strong> on this site, which means that you will be using PMPro settings from another site in your Network to control site access.</p>
+
+			<p>In order to finish setting up the Multisite Membership Add On, you'll need to check that you have the proper prefix for the site controlling the settings in wp-config.php. Select the site which you will use as the Main site and click the button to get the prefix.</p>
 			<form id="select-site-form" action="" method="POST">
-				<div><strong><lqbel>Select PMPro Domain</strong>
-					<?php echo self::render_sites_dropdown(); ?></lqbel>
+				<div><strong><label>Select PMPro Domain</strong>
+					<?php echo self::render_sites_dropdown(); ?></label>
 					<input type="submit" name="select-site-submit" id="select_site_submit" class="button-primary" value="<?php esc_attr_e( 'Get Site Prefix', 'selectsite' ); ?>"/>
 					<img src="<?php echo esc_url( admin_url( '/images/wpspin_light.gif' ) ); ?>" class="waiting" id="select_site_loading" style="display:none;"/>
 				</div>
 			</form>
 			<div id="select_site_results"></div>
 
-
+			<p>You'll know that you have your prefix defined correctly when the value above and the value below match. Currently your prefix is:</p>
+			<h4><?php echo '<pre>define( \'PMPRO_NETWORK_MAIN_DB_PREFIX\', \'' . PMPRO_NETWORK_MAIN_DB_PREFIX . '\' );</pre>'; ?></h4>
 		</div>
 		<?php
 	}
@@ -125,12 +127,15 @@ class Manage_Multisite {
 			<select class="site-dropdown-select" name="sitevalue">
 				<?php
 				foreach ( $sites as $site ) {
+					$bool_val = SUBDOMAIN_INSTALL;
+					$siteurl = $bool_val ? $site->domain : $site->domain . $site->path;
 					printf(
 						'<option value="%s" %s>%s</option>',
 						$site->blog_id,
 						selected( $site->blog_id, $site->blog_id, false ),
-						$site->domain
+						$siteurl
 					);
+
 				}
 				?>
 			</select>
