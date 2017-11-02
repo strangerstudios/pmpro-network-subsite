@@ -2,7 +2,6 @@ jQuery(document).ready(function($) {
 	$('#select-site-form').submit(function() {
 		$('#select_site_loading').show();
 		$('#select_site_submit').attr('disabled', true);
-		// $('#select_site_svalue').val();
 
       data = {
       	action: 'select_site_get_results',
