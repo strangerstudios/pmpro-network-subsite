@@ -12,19 +12,8 @@ class Manage_Multisite {
 	 */
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'pmpro_multisite_membership_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'pbrx_load_scripts' ) );
-		add_action( 'wp_ajax_pbrx_get_results', array( __CLASS__, 'select_pbrx_ajax' ) );
-		// add_action( 'admin_head', array( __CLASS__, 'print_screen_info' ) );
-	}
-
-	/**
-	 * [print_screen_info description]
-	 *
-	 * @return [type] [description]
-	 */
-	public static function print_screen_info() {
-		 $screen = get_current_screen();
-		 echo '<h4 style="color: salmon;position:absolute;z-index: 8888;left: 45%;top: 1rem;">' . $screen->id . '</h4>';
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'select_site_load_scripts' ) );
+		add_action( 'wp_ajax_select_site_get_results', array( __CLASS__, 'select_site_ajax' ) );
 	}
 
 	/**
@@ -37,56 +26,58 @@ class Manage_Multisite {
 	}
 
 	/**
-	 * [pbrx_load_scripts description]
+	 * [select_site_load_scripts description]
 	 *
 	 * @return [type] [description]
 	 */
-	public static function pbrx_load_scripts() {
+	public static function select_site_load_scripts() {
 		$screen = get_current_screen();
 		if ( 'toplevel_page_pmpro-membership' === $screen->id || 'memberships_page_pmpro-multisite-membership' === $screen->id ) {
 			wp_enqueue_style( 'multisite-membership', plugin_dir_url( __FILE__ ) . 'css/multisite-membership.css' );
 		}
 		wp_enqueue_script( 'select-site', plugin_dir_url( __FILE__ ) . 'js/select-site.js', array( 'jquery' ) );
 		wp_localize_script(
-			'select-site', 'pbrx_vars', array(
-				'pbrx_nonce' => wp_create_nonce( 'pbrx-nonce' ),
+			'select-site', 'select_site_vars', array(
+				'select_site_nonce' => wp_create_nonce( 'select-site-nonce' ),
 			)
 		);
 	}
 
 	/**
-	 * [pbrx_render_admin description]
+	 * [pmpro_multisite_membership_page description]
 	 *
 	 * @return [type] [description]
 	 */
-	public static function pbrx_render_admin() {
+	public static function pmpro_multisite_membership_page() {
 		global $wpdb;
 		self::pmpro_membership_header();
 		?>
 		<div class="wrap">
-			<h2><?php esc_attr_e( 'PMPro Multisite Membership', 'pbrx' ); ?></h2>
-			<p>You have activated the Multisite Membership Add On on this site, which means that you will be using PMPro settings from another site in your Network to control site access.</p>
-			<p>In order to finish setting up the Multisite Membership Add On, you'll need to check that you have the proper prefix for the site controlling the settings in wp-config.php.</p>
-			<form id="pbrx-form" action="" method="POST">
-				<div><strong><lqbel>Select PMPro Domain</strong>
-					<?php echo self::render_sites_dropdown(); ?></lqbel>
-					<input type="submit" name="pbrx-submit" id="pbrx_submit" class="button-primary" value="<?php esc_attr_e( 'Get Site Prefix', 'pbrx' ); ?>"/>
-					<img src="<?php echo esc_url( admin_url( '/images/wpspin_light.gif' ) ); ?>" class="waiting" id="pbrx_loading" style="display:none;"/>
+			<h2><?php esc_attr_e( 'PMPro Multisite Membership', 'selectsite' ); ?></h2>
+			<p>You have activated the <strong>Multisite Membership Add On</strong> on this site, which means that you will be using PMPro settings from another site in your Network to control site access.</p>
+
+			<p>In order to finish setting up the Multisite Membership Add On, you'll need to check that you have the proper prefix for the site controlling the settings in wp-config.php. Select the site which you will use as the Main site and click the button to get the prefix.</p>
+			<form id="select-site-form" action="" method="POST">
+				<div><strong><label>Select PMPro Domain</strong>
+					<?php echo self::render_sites_dropdown(); ?></label>
+					<input type="submit" name="select-site-submit" id="select_site_submit" class="button-primary" value="<?php esc_attr_e( 'Get Site Prefix', 'selectsite' ); ?>"/>
+					<img src="<?php echo esc_url( admin_url( '/images/wpspin_light.gif' ) ); ?>" class="waiting" id="select_site_loading" style="display:none;"/>
 				</div>
 			</form>
-			<div id="pbrx_results"></div>
+			<div id="select_site_results"></div>
 
-
+			<p>You'll know that you have your prefix defined correctly when the value above and the value below match. Currently your prefix is:</p>
+			<h4><?php echo '<pre>define( \'PMPRO_NETWORK_MAIN_DB_PREFIX\', \'' . PMPRO_NETWORK_MAIN_DB_PREFIX . '\' );</pre>'; ?></h4>
 		</div>
 		<?php
 	}
 
 	/**
-	 * [select_pbrx_ajax description]
+	 * [select_site_ajax description]
 	 *
 	 * @return [type] [description]
 	 */
-	public static function select_pbrx_ajax() {
+	public static function select_site_ajax() {
 		global $wpdb;
 		$array = array();
 		$array = $_POST;
@@ -96,7 +87,7 @@ class Manage_Multisite {
 
 		switch_to_blog( $site );
 
-		echo '<h4><pre>define( \'PMPRO_NETWORK_MAIN_DB_PREFIX\', \'' . $wpdb->prefix . '\' );</pre></h4>';
+		echo '<h4><pre>define( \'PMPRO_NETWORK_MAIN_DB_PREFIX\', \'' . substr( $wpdb->prefix, 0, -1 ) . '\' );</pre></h4>';
 		restore_current_blog();
 
 		echo '<h4>Membership is controlled here <a href="' . $info->siteurl . '/wp-admin/admin.php?page=pmpro-membershiplevels">' . $info->siteurl . '/wp-admin/admin.php?page=pmpro-membershiplevels</a></h4>';
@@ -136,12 +127,15 @@ class Manage_Multisite {
 			<select class="site-dropdown-select" name="sitevalue">
 				<?php
 				foreach ( $sites as $site ) {
+					$bool_val = SUBDOMAIN_INSTALL;
+					$siteurl = $bool_val ? $site->domain : $site->domain . $site->path;
 					printf(
 						'<option value="%s" %s>%s</option>',
 						$site->blog_id,
 						selected( $site->blog_id, $site->blog_id, false ),
-						$site->domain
+						$siteurl
 					);
+
 				}
 				?>
 			</select>
@@ -155,36 +149,7 @@ class Manage_Multisite {
 	 * @return [type] [description]
 	 */
 	public static function pmpro_multisite_membership_menu() {
-		add_menu_page( __( 'Memberships', 'paid-memberships-pro' ), __( 'Memberships', 'paid-memberships-pro' ), 'pmpro_memberships_menu', 'pmpro-membership', $top_menu_cap, 'dashicons-groups' );
-		add_submenu_page( 'pmpro-membership',  __( 'Memberships', 'paid-memberships-pro' ), __( 'Memberships', 'paid-memberships-pro' ), 'pmpro_membership', 'pmpro-membership', array( __CLASS__, 'pmpro_membership' ) );
-		add_submenu_page( 'pmpro-membership', __( 'Multisite Membership', 'paid-memberships-pro' ), __( 'Multisite Membership', 'paid-memberships-pro' ), 'pmpro_multisite_membership', 'pmpro-multisite-membership', array( 'Manage_Multisite', 'pbrx_render_admin' ) );
-	}
-
-	/**
-	 * [pmpro_membership description]
-	 *
-	 * @return [type] [description]
-	 */
-	public static function pmpro_membership() {
-		global $wpdb;
-		echo '<div class="wrap pmpro_admin pmpro-admin-header">';
-	?>
-		<div class="pmpro_banner">
-			<a class="pmpro_logo" title="Paid Memberships Pro - Membership Plugin for WordPress" target="_blank" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><img src="<?php echo PMPRO_URL; ?>/images/Paid-Memberships-Pro.png" width="350" height="75" border="0" alt="Paid Memberships Pro(c) - All Rights Reserved" /></a>
-			<div class="pmpro_meta"><span class="pmpro_tag-grey">v<?php echo PMPRO_VERSION; ?></span><a target="_blank" class="pmpro_tag-blue" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><?php _e( 'Plugin Support', 'paid-memberships-pro' ); ?></a><a target="_blank" class="pmpro_tag-blue" href="http://www.paidmembershipspro.com/forums/"><?php _e( 'User Forum', 'paid-memberships-pro' ); ?></a></div>
-			<br style="clear:both;" />
-
-			<h3>Enter Content here</h3>
-	<?php
-		echo '<h4>This Site\'s Prefix => ' . $wpdb->prefix . '</h4>';
-		echo '<h4>Network\'s Main Site Prefix => ' . $wpdb->base_prefix . '</h4>';
-
-		$site_2 = get_sites( 2 );
-		switch_to_blog( $site_2->id );
-		echo '<h4>' . $wpdb->prefix . '</h4>';
-		restore_current_blog();
-
-		echo '</div>';
+		add_menu_page( __( 'Memberships', 'paid-memberships-pro' ), __( 'Memberships', 'paid-memberships-pro' ), 'manage_options', 'pmpro-multisite-membership.php', array( 'Manage_Multisite', 'pmpro_multisite_membership_page' ), 'dashicons-groups' );
 	}
 
 	/**

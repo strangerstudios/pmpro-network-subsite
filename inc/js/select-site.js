@@ -1,19 +1,19 @@
 jQuery(document).ready(function($) {
-	$('#pbrx-form').submit(function() {
-		$('#pbrx_loading').show();
-		$('#pbrx_submit').attr('disabled', true);
-		// $('#pbrx_svalue').val();
+	$('#select-site-form').submit(function() {
+		$('#select_site_loading').show();
+		$('#select_site_submit').attr('disabled', true);
+		// $('#select_site_svalue').val();
 
       data = {
-      	action: 'pbrx_get_results',
-      	pbrx_nonce: pbrx_vars.pbrx_nonce,
+      	action: 'select_site_get_results',
+      	select_site_nonce: select_site_vars.select_site_nonce,
       	site: $('.site-dropdown-select').val()
       };
 
      	$.post(ajaxurl, data, function (response) {
-			$('#pbrx_results').html(response);
-			$('#pbrx_loading').hide();
-			$('#pbrx_submit').attr('disabled', false);
+			$('#select_site_results').html(response);
+			$('#select_site_loading').hide();
+			$('#select_site_submit').attr('disabled', false);
 		});	
 		
 		return false;
