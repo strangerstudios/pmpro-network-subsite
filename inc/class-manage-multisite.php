@@ -65,6 +65,7 @@ class Manage_Multisite {
 				<?php echo self::render_sites_dropdown(); ?></label>
 				<input type="submit" name="select-site-submit" id="select_site_submit" class="button-primary" value="<?php esc_attr_e( 'Get Site Prefix', 'selectsite' ); ?>"/>
 				<img src="<?php echo esc_url( admin_url( '/images/wpspin_light.gif' ) ); ?>" class="waiting" id="select_site_loading" style="display:none;"/>
+			</div>
 		</form>
 		<div id="select_site_results"></div>
 
