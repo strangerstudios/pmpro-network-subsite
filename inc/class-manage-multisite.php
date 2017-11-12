@@ -14,15 +14,18 @@ class Manage_Multisite {
 		add_action( 'admin_menu', array( __CLASS__, 'pmpro_multisite_membership_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'select_site_load_scripts' ) );
 		add_action( 'wp_ajax_select_site_get_results', array( __CLASS__, 'select_site_ajax' ) );
+		add_action( 'wp_before_admin_bar_render', array( __CLASS__, 'remove_pmpro_adminbar' ), 999 );
 	}
 
 	/**
-	 * [admin_css_bottom description]
+	 * [select_site_load_scripts description]
 	 *
 	 * @return [type] [description]
 	 */
-	public static function admin_css_bottom() {
-		// url( 'http://first.pmp-ms.rox/wp-content/plugins/paid-memberships-pro/images/Paid-Memberships-Pro_watermark.png' );
+	public static function remove_pmpro_adminbar() {
+		global $wp_admin_bar;
+		$id = 'paid-memberships-pro';
+		$wp_admin_bar->remove_menu( $id );
 	}
 
 	/**
@@ -53,21 +56,20 @@ class Manage_Multisite {
 		self::pmpro_membership_header();
 		?>
 		<div class="wrap">
-			<h2><?php esc_attr_e( 'PMPro Multisite Membership', 'selectsite' ); ?></h2>
-			<p>You have activated the <strong>Multisite Membership Add On</strong> on this site, which means that you will be using PMPro settings from another site in your Network to control site access.</p>
+		<h2><?php esc_attr_e( 'PMPro Multisite Membership', 'selectsite' ); ?></h2>
+		<p>You have activated the <strong>Multisite Membership Add On</strong> on this site, which means that you will be using PMPro settings from another site in your Network to control site access.</p>
 
-			<p>In order to finish setting up the Multisite Membership Add On, you'll need to check that you have the proper prefix for the site controlling the settings in wp-config.php. Select the site which you will use as the Main site and click the button to get the prefix.</p>
-			<form id="select-site-form" action="" method="POST">
-				<div><strong><label>Select PMPro Domain</strong>
-					<?php echo self::render_sites_dropdown(); ?></label>
-					<input type="submit" name="select-site-submit" id="select_site_submit" class="button-primary" value="<?php esc_attr_e( 'Get Site Prefix', 'selectsite' ); ?>"/>
-					<img src="<?php echo esc_url( admin_url( '/images/wpspin_light.gif' ) ); ?>" class="waiting" id="select_site_loading" style="display:none;"/>
-				</div>
-			</form>
-			<div id="select_site_results"></div>
+		<p>In order to finish setting up the Multisite Membership Add On, you'll need to check that you have the proper prefix for the site controlling the settings in wp-config.php. Select the site which you will use as the Main site and click the button to get the prefix.</p>
+		<form id="select-site-form" action="" method="POST">
+			<div><strong><label>Select PMPro Domain</strong>
+				<?php echo self::render_sites_dropdown(); ?></label>
+				<input type="submit" name="select-site-submit" id="select_site_submit" class="button-primary" value="<?php esc_attr_e( 'Get Site Prefix', 'selectsite' ); ?>"/>
+				<img src="<?php echo esc_url( admin_url( '/images/wpspin_light.gif' ) ); ?>" class="waiting" id="select_site_loading" style="display:none;"/>
+		</form>
+		<div id="select_site_results"></div>
 
-			<p>You'll know that you have your prefix defined correctly when the value above and the value below match. Currently your prefix is:</p>
-			<h4><?php echo '<pre>define( \'PMPRO_NETWORK_MAIN_DB_PREFIX\', \'' . PMPRO_NETWORK_MAIN_DB_PREFIX . '\' );</pre>'; ?></h4>
+		<p>You'll know that you have your prefix defined correctly when the value above and the value below match. Currently your prefix is:</p>
+		<h4><?php echo '<pre>define( \'PMPRO_NETWORK_MAIN_DB_PREFIX\', \'' . PMPRO_NETWORK_MAIN_DB_PREFIX . '\' );</pre>'; ?></h4>
 		</div>
 		<?php
 	}
@@ -124,23 +126,23 @@ class Manage_Multisite {
 		$sites = self::get_sites();
 		?>
 		<label>
-			<select class="site-dropdown-select" name="sitevalue">
-				<?php
-				foreach ( $sites as $site ) {
-					$bool_val = SUBDOMAIN_INSTALL;
-					$siteurl = $bool_val ? $site->domain : $site->domain . $site->path;
-					printf(
-						'<option value="%s" %s>%s</option>',
-						$site->blog_id,
-						selected( $site->blog_id, $site->blog_id, false ),
-						$siteurl
-					);
+		<select class="site-dropdown-select" name="sitevalue">
+			<?php
+			foreach ( $sites as $site ) {
+				$bool_val = SUBDOMAIN_INSTALL;
+				$siteurl = $bool_val ? $site->domain : $site->domain . $site->path;
+				printf(
+					'<option value="%s" %s>%s</option>',
+					$site->blog_id,
+					selected( $site->blog_id, $site->blog_id, false ),
+					$siteurl
+				);
 
-				}
-				?>
+			}
+			?>
 			</select>
-		</label>
-	<?php
+			</label>
+		<?php
 	}
 
 	/**
@@ -170,12 +172,12 @@ class Manage_Multisite {
 	 */
 	public static function pmpro_membership_header() {
 		echo '<div class="wrap pmpro_admin pmpro-admin-header addon">';
-	?>
+		?>
 		<div class="pmpro_banner">
-			<a class="pmpro_logo" title="Paid Memberships Pro - Membership Plugin for WordPress" target="_blank" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><img src="<?php echo PMPRO_URL; ?>/images/Paid-Memberships-Pro.png" width="350" height="75" border="0" alt="Paid Memberships Pro(c) - All Rights Reserved" /></a>
-			<div class="pmpro_meta"><span class="pmpro_tag-grey">v<?php echo PMPRO_VERSION; ?></span><a target="_blank" class="pmpro_tag-blue" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><?php _e( 'Plugin Support', 'paid-memberships-pro' ); ?></a><a target="_blank" class="pmpro_tag-blue" href="http://www.paidmembershipspro.com/forums/"><?php _e( 'User Forum', 'paid-memberships-pro' ); ?></a></div>
-			<br style="clear:both;" />
+		<a class="pmpro_logo" title="Paid Memberships Pro - Membership Plugin for WordPress" target="_blank" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><img src="<?php echo PMPRO_URL; ?>/images/Paid-Memberships-Pro.png" width="350" height="75" border="0" alt="Paid Memberships Pro(c) - All Rights Reserved" /></a>
+		<div class="pmpro_meta"><span class="pmpro_tag-grey">v<?php echo PMPRO_VERSION; ?></span><a target="_blank" class="pmpro_tag-blue" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><?php _e( 'Plugin Support', 'paid-memberships-pro' ); ?></a><a target="_blank" class="pmpro_tag-blue" href="http://www.paidmembershipspro.com/forums/"><?php _e( 'User Forum', 'paid-memberships-pro' ); ?></a></div>
+		<br style="clear:both;" />
 	<?php
-		echo '</div>';
+	echo '</div>';
 	}
 }
