@@ -62,7 +62,7 @@ add_action( 'init', 'pmpron_init_get_levels', 1 );
 function pmpron_subsite_init() {
 	//remove admin pages
 	remove_action( 'admin_menu', 'pmpro_add_pages' );
-	remove_action( 'admin_bar_menu', 'pmpro_admin_bar_menu' );
+	remove_action( 'admin_bar_menu', 'pmpro_admin_bar_menu', 1000);
 	
 	//remove membership level from edit users page
 	remove_action( 'show_user_profile', 'pmpro_membership_level_profile_fields' );
