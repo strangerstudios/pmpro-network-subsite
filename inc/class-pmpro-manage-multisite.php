@@ -24,7 +24,7 @@ class PMPro_Manage_Multisite {
 	 */
 	public static function remove_adminbar() {
 		global $wp_admin_bar;
-		$id = 'pmpro-multisite-membership';
+		$id = 'paid-memberships-pro';
 		$wp_admin_bar->remove_menu( $id );
 	}
 
