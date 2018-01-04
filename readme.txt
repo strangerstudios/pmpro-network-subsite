@@ -37,6 +37,12 @@ Please post it in the GitHub issue tracker here: https://github.com/strangerstud
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= .4.3 =
+* ENHANCEMENT: Improving readme documentation and updating add on name.
+
+= .4.2 =
+* ENHANCEMENT: Improving readme documentation and updating add on name.
+
 = .4.1 =
 * ENHANCEMENT: Improving readme documentation and updating add on name.
 

@@ -1,19 +1,19 @@
 <?php
 /**
  * Plugin Name: Paid Memberships Pro - Multisite Membership Add On Beta
-Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-network-subsites/
-Description: Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network.
-Version: .4.2b
-Author: Stranger Studios
-Author URI: http://www.strangerstudios.com
-Text-domain: pmpro-multisite-membership
-*/
+ * Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-network-subsites/
+ * Description: Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network.
+ * Version: .4.3
+ * Author: Stranger Studios
+ * Author URI: http://www.strangerstudios.com
+ * Text-domain: pmpro-multisite-membership
+ */
 
 if ( ! defined( 'PMPRO_NETWORK_MAIN_DB_PREFIX' ) ) {
 	define( 'PMPRO_NETWORK_MAIN_DB_PREFIX', 'wp' );
 }
 
-include( 'inc/class-manage-multisite.php' );
+include( 'inc/class-pmpro-manage-multisite.php' );
 PMPro_Manage_Multisite::init();
 /*
 	Make sure this plugin loads after Paid Memberships Pro

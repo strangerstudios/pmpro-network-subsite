@@ -11,10 +11,10 @@ class PMPro_Manage_Multisite {
 	 * @return type
 	 */
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'pmpro_multisite_membership_menu' ) );
+		add_action( 'admin_menu', array( __CLASS__, 'multisite_membership_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'select_site_load_scripts' ) );
 		add_action( 'wp_ajax_select_site_get_results', array( __CLASS__, 'select_site_ajax' ) );
-		add_action( 'wp_before_admin_bar_render', array( __CLASS__, 'remove_pmpro_adminbar' ), 999 );
+		add_action( 'wp_before_admin_bar_render', array( __CLASS__, 'remove_adminbar' ), 999 );
 	}
 
 	/**
@@ -22,7 +22,7 @@ class PMPro_Manage_Multisite {
 	 *
 	 * @return [type] [description]
 	 */
-	public static function remove_pmpro_adminbar() {
+	public static function remove_adminbar() {
 		global $wp_admin_bar;
 		$id = 'pmpro-multisite-membership';
 		$wp_admin_bar->remove_menu( $id );
@@ -47,13 +47,13 @@ class PMPro_Manage_Multisite {
 	}
 
 	/**
-	 * [pmpro_multisite_membership_page description]
+	 * [multisite_membership_page description]
 	 *
 	 * @return [type] [description]
 	 */
-	public static function pmpro_multisite_membership_page() {
+	public static function multisite_membership_page() {
 		global $wpdb;
-		self::pmpro_membership_header();
+		self::membership_header();
 		?>
 		<div class="wrap">
 		<h2><?php _e( 'PMPro Multisite Membership', 'pmpro-multisite-membership' ); ?></h2>
@@ -147,36 +147,36 @@ class PMPro_Manage_Multisite {
 	}
 
 	/**
-	 * [pmpro_multisite_membership_menu description]
+	 * [multisite_membership_menu description]
 	 *
 	 * @return [type] [description]
 	 */
-	public static function pmpro_multisite_membership_menu() {
-		add_menu_page( __( 'Memberships', 'pmpro-multisite-membership' ), __( 'Memberships', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-multisite-membership.php', array( 'PMPro_Manage_Multisite', 'pmpro_multisite_membership_page' ), 'dashicons-groups' );
+	public static function multisite_membership_menu() {
+		add_menu_page( __( 'Memberships', 'pmpro-multisite-membership' ), __( 'Memberships', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-multisite-membership.php', array( 'PMPro_Manage_Multisite', 'multisite_membership_page' ), 'dashicons-groups' );
 	}
 
 	/**
-	 * [pmpro_multisite_membership description]
+	 * [multisite_membership description]
 	 *
 	 * @return [type] [description]
 	 */
-	public static function pmpro_multisite_membership() {
-		echo '<div class="wrap pmpro_admin">';
+	public static function multisite_membership() {
+		echo '<div class="wrap admin">';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
-		PMPro_Manage_Multisite::pmpro_membership_header();
+		PMPro_Manage_Multisite::membership_header();
 	}
 
 	/**
-	 * [pmpro_membership_header description]
+	 * [membership_header description]
 	 *
 	 * @return [type] [description]
 	 */
-	public static function pmpro_membership_header() {
-		echo '<div class="wrap pmpro_admin pmpro-admin-header addon">';
+	public static function membership_header() {
+		echo '<div class="wrap admin pmpro-admin-header addon">';
 		?>
-		<div class="pmpro_banner">
-		<a class="pmpro_logo" title="Paid Memberships Pro - Membership Plugin for WordPress" target="_blank" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><img src="<?php echo PMPRO_URL; ?>/images/Paid-Memberships-Pro.png" width="350" height="75" border="0" alt="Paid Memberships Pro(c) - All Rights Reserved" /></a>
-		<div class="pmpro_meta"><span class="pmpro_tag-grey">v<?php echo PMPRO_VERSION; ?></span><a target="_blank" class="pmpro_tag-blue" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><?php _e( 'Plugin Support', 'pmpro-multisite-membership' ); ?></a><a target="_blank" class="pmpro_tag-blue" href="http://www.paidmembershipspro.com/forums/"><?php _e( 'User Forum', 'pmpro-multisite-membership' ); ?></a></div>
+		<div class="banner">
+		<a class="logo" title="Paid Memberships Pro - Membership Plugin for WordPress" target="_blank" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><img src="<?php echo PMPRO_URL; ?>/images/Paid-Memberships-Pro.png" width="350" height="75" border="0" alt="Paid Memberships Pro(c) - All Rights Reserved" /></a>
+		<div class="meta"><span class="tag-grey">v<?php echo PMPRO_VERSION; ?></span> | <a target="_blank" class="tag-blue" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><?php _e( 'Plugin Support', 'pmpro-multisite-membership' ); ?></a> | <a target="_blank" class="tag-blue" href="http://www.paidmembershipspro.com/forums/"><?php _e( 'User Forum', 'pmpro-multisite-membership' ); ?></a></div>
 		<br style="clear:both;" />
 	<?php
 	echo '</div>';
