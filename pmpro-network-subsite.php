@@ -1,11 +1,12 @@
 <?php
-/*
-Plugin Name: Paid Memberships Pro - Multisite Membership Add On Beta
+/**
+ * Plugin Name: Paid Memberships Pro - Multisite Membership Add On Beta
 Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-network-subsites/
 Description: Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network.
 Version: .4.2b
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
+Text-domain: pmpro-multisite-membership
 */
 
 if ( ! defined( 'PMPRO_NETWORK_MAIN_DB_PREFIX' ) ) {
@@ -13,7 +14,7 @@ if ( ! defined( 'PMPRO_NETWORK_MAIN_DB_PREFIX' ) ) {
 }
 
 include( 'inc/class-manage-multisite.php' );
-Manage_Multisite::init();
+PMPro_Manage_Multisite::init();
 /*
 	Make sure this plugin loads after Paid Memberships Pro
 */
@@ -89,8 +90,8 @@ add_action( 'init', 'pmpron_subsite_init', 15 );
 function pmpron_subsite_plugin_row_meta( $links, $file ) {
 	if ( strpos( $file, 'pmpro-network-subsite.php' ) !== false ) {
 		$new_links = array(
-			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/plus-add-ons/pmpro-network-membership/' ) . '" title="' . esc_attr( __( 'View Documentation', 'pmpron_subsite' ) ) . '">' . __( 'Docs', 'pmpron_subsite' ) . '</a>',
-			'<a href="' . esc_url( 'http://paidmembershipspro.com/support/' ) . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpron_subsite' ) ) . '">' . __( 'Support', 'pmpron_subsite' ) . '</a>',
+			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/plus-add-ons/pmpro-network-membership/' ) . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-multisite-membership' ) ) . '">' . __( 'Docs', 'pmpro-multisite-membership' ) . '</a>',
+			'<a href="' . esc_url( 'http://paidmembershipspro.com/support/' ) . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro-multisite-membership' ) ) . '">' . __( 'Support', 'pmpro-multisite-membership' ) . '</a>',
 		);
 		$links = array_merge( $links, $new_links );
 	}

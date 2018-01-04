@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) || die( 'File cannot be accessed directly' );
 /**
  *
  */
-class Manage_Multisite {
+class PMPro_Manage_Multisite {
 	/**
 	 * Description
 	 *
@@ -24,7 +24,7 @@ class Manage_Multisite {
 	 */
 	public static function remove_pmpro_adminbar() {
 		global $wp_admin_bar;
-		$id = 'paid-memberships-pro';
+		$id = 'pmpro-multisite-membership';
 		$wp_admin_bar->remove_menu( $id );
 	}
 
@@ -56,14 +56,14 @@ class Manage_Multisite {
 		self::pmpro_membership_header();
 		?>
 		<div class="wrap">
-		<h2><?php esc_attr_e( 'PMPro Multisite Membership', 'selectsite' ); ?></h2>
+		<h2><?php _e( 'PMPro Multisite Membership', 'pmpro-multisite-membership' ); ?></h2>
 		<p>You have activated the <strong>Multisite Membership Add On</strong> on this site, which means that you will be using PMPro settings from another site in your Network to control site access.</p>
 
 		<p>In order to finish setting up the Multisite Membership Add On, you'll need to check that you have the proper prefix for the site controlling the settings in wp-config.php. Select the site which you will use as the Main site and click the button to get the prefix.</p>
 		<form id="select-site-form" action="" method="POST">
 			<div><strong><label>Select PMPro Domain</strong>
 				<?php echo self::render_sites_dropdown(); ?></label>
-				<input type="submit" name="select-site-submit" id="select_site_submit" class="button-primary" value="<?php esc_attr_e( 'Get Site Prefix', 'selectsite' ); ?>"/>
+				<input type="submit" name="select-site-submit" id="select_site_submit" class="button-primary" value="<?php _e( 'Get Site Prefix', 'pmpro-multisite-membership' ); ?>"/>
 				<img src="<?php echo esc_url( admin_url( '/images/wpspin_light.gif' ) ); ?>" class="waiting" id="select_site_loading" style="display:none;"/>
 			</div>
 		</form>
@@ -152,7 +152,7 @@ class Manage_Multisite {
 	 * @return [type] [description]
 	 */
 	public static function pmpro_multisite_membership_menu() {
-		add_menu_page( __( 'Memberships', 'paid-memberships-pro' ), __( 'Memberships', 'paid-memberships-pro' ), 'manage_options', 'pmpro-multisite-membership.php', array( 'Manage_Multisite', 'pmpro_multisite_membership_page' ), 'dashicons-groups' );
+		add_menu_page( __( 'Memberships', 'pmpro-multisite-membership' ), __( 'Memberships', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-multisite-membership.php', array( 'PMPro_Manage_Multisite', 'pmpro_multisite_membership_page' ), 'dashicons-groups' );
 	}
 
 	/**
@@ -163,7 +163,7 @@ class Manage_Multisite {
 	public static function pmpro_multisite_membership() {
 		echo '<div class="wrap pmpro_admin">';
 		echo '<h2>' . __FUNCTION__ . '</h2>';
-		Manage_Multisite::pmpro_membership_header();
+		PMPro_Manage_Multisite::pmpro_membership_header();
 	}
 
 	/**
@@ -176,7 +176,7 @@ class Manage_Multisite {
 		?>
 		<div class="pmpro_banner">
 		<a class="pmpro_logo" title="Paid Memberships Pro - Membership Plugin for WordPress" target="_blank" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><img src="<?php echo PMPRO_URL; ?>/images/Paid-Memberships-Pro.png" width="350" height="75" border="0" alt="Paid Memberships Pro(c) - All Rights Reserved" /></a>
-		<div class="pmpro_meta"><span class="pmpro_tag-grey">v<?php echo PMPRO_VERSION; ?></span><a target="_blank" class="pmpro_tag-blue" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><?php _e( 'Plugin Support', 'paid-memberships-pro' ); ?></a><a target="_blank" class="pmpro_tag-blue" href="http://www.paidmembershipspro.com/forums/"><?php _e( 'User Forum', 'paid-memberships-pro' ); ?></a></div>
+		<div class="pmpro_meta"><span class="pmpro_tag-grey">v<?php echo PMPRO_VERSION; ?></span><a target="_blank" class="pmpro_tag-blue" href="<?php echo pmpro_https_filter( 'http://www.paidmembershipspro.com' ); ?>"><?php _e( 'Plugin Support', 'pmpro-multisite-membership' ); ?></a><a target="_blank" class="pmpro_tag-blue" href="http://www.paidmembershipspro.com/forums/"><?php _e( 'User Forum', 'pmpro-multisite-membership' ); ?></a></div>
 		<br style="clear:both;" />
 	<?php
 	echo '</div>';
