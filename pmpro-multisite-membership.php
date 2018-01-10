@@ -55,7 +55,7 @@ $wpdb->pmpro_discount_codes_uses = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discou
 // get levels again
 function pmpron_init_get_levels() {
 	global $wpdb, $membership_levels;
-	$membership_levels = $wpdb->get_results( 'SELECT * FROM {$wpdb->pmpro_membership_levels}', OBJECT );
+	$membership_levels = $wpdb->get_results( "SELECT * FROM {$wpdb->pmpro_membership_levels}", OBJECT );
 }
 add_action( 'init', 'pmpron_init_get_levels', 1 );
 
