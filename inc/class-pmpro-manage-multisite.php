@@ -51,6 +51,8 @@ class PMPro_Manage_Multisite {
 			<?php
 		}
 
+		if( defined( 'PMPRO_DIR' ) ) { require_once( PMPRO_DIR . '/adminpages/admin_header.php' ); }
+
 		// Show the form.
 		?>
 		<div class="wrap">
@@ -82,5 +84,7 @@ class PMPro_Manage_Multisite {
 		</form>
 		</div>
 		<?php
+
+		if( defined( 'PMPRO_DIR' ) ) { require_once( PMPRO_DIR . '/adminpages/admin_footer.php' ); }
 	}
 }
