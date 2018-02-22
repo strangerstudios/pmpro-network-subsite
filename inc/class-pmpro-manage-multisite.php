@@ -71,6 +71,17 @@ class PMPro_Manage_Multisite {
 
 		<p>You'll know that you have your prefix defined correctly when the value above and the value below match. Currently your prefix is:</p>
 		<h4><?php echo '<pre>define( \'PMPRO_NETWORK_MAIN_DB_PREFIX\', \'' . PMPRO_NETWORK_MAIN_DB_PREFIX . '\' );</pre>'; ?></h4>
+		<?php
+		$terms = get_terms(
+			array(
+				'taxonomy' => 'category',
+				'hide_empty' => false,
+			)
+		);
+		echo '<pre>';
+		print_r( $terms );
+		echo '<pre>';
+		?>
 		</div>
 		<?php
 	}
