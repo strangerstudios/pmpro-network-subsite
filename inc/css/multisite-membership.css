@@ -1,8 +1,0 @@
-#wpwrap {
-    background-color: aliceblue;
-}
-#wpbody > #wpbody-content > div > div > p,
-.wrap p {
-	font-size: 1rem;
-	padding: 2px 2rem;
-}
