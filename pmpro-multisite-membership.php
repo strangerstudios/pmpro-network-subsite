@@ -9,12 +9,32 @@
  * Text-domain: pmpro-multisite-membership
  */
 
-if ( ! defined( 'PMPRO_NETWORK_MAIN_DB_PREFIX' ) ) {
-	define( 'PMPRO_NETWORK_MAIN_DB_PREFIX', 'wp' );
+/** 
+ * Get the Main DB Prefix
+ *
+ * Thanks, Bainternet on Stack Exchange for the code to grab the DB prefix for the current site:
+ * https://wordpress.stackexchange.com/a/26467/3652
+ */
+function pmpro_multisite_membership_get_main_db_prefix() {
+	$main_db_prefix = get_site_option( 'pmpro_multisite_membership_main_db_prefix' );
+
+	if( empty( $main_db_prefix ) ) {
+		// checking if they used this constant for backwards compatability
+		if( defined( 'PMPRO_NETWORK_MAIN_DB_PREFIX' ) ) {
+			$main_db_prefix = PMPRO_NETWORK_MAIN_DB_PREFIX . '_';		//when we used constants, the trailing _ wasn't included
+		} else {
+			global $wpdb, $current_site;
+			$main_db_prefix = $wpdb->get_blog_prefix( $wpdb->get_var( $wpdb->prepare ( "SELECT blogs.blog_id FROM $wpdb->blogs blogs WHERE blogs.domain = '%s' AND blogs.path = '%s' ORDER BY blogs.blog_id ASC LIMIT 1", $current_site->domain, $current_site->path ) ) );
+		}
+		update_site_option( 'pmpro_multisite_membership_main_db_prefix', $main_db_prefix );
+	}
+
+	return $main_db_prefix;
 }
 
 include( 'inc/class-pmpro-manage-multisite.php' );
 PMPro_Manage_Multisite::init();
+
 /*
 	Make sure this plugin loads after Paid Memberships Pro
 */
@@ -44,13 +64,13 @@ add_action( 'activated_plugin', 'pmpro_multisite_membership_activated_plugin' );
 	(Updated again in init to get all cases.)
 */
 global $wpdb;
-$wpdb->pmpro_memberships_users = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_memberships_users';
-$wpdb->pmpro_membership_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_levels';
-$wpdb->pmpro_membership_levelmeta = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_levelmeta';
-$wpdb->pmpro_membership_orders = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_orders';
-$wpdb->pmpro_discount_codes = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes';
-$wpdb->pmpro_discount_codes_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes_levels';
-$wpdb->pmpro_discount_codes_uses = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes_uses';
+$wpdb->pmpro_memberships_users = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_memberships_users';
+$wpdb->pmpro_membership_levels = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_levels';
+$wpdb->pmpro_membership_levelmeta = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_levelmeta';
+$wpdb->pmpro_membership_orders = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_orders';
+$wpdb->pmpro_discount_codes = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes';
+$wpdb->pmpro_discount_codes_levels = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes_levels';
+$wpdb->pmpro_discount_codes_uses = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes_uses';
 
 // get levels again
 function pmpro_multisite_membership_init_get_levels() {
@@ -74,13 +94,13 @@ function pmpro_multisite_membership_init() {
 
 	// update wpdb tables again
 	global $wpdb;
-	$wpdb->pmpro_memberships_users = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_memberships_users';
-	$wpdb->pmpro_membership_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_levels';
-	$wpdb->pmpro_membership_levelmeta = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_levelmeta';
-	$wpdb->pmpro_membership_orders = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_membership_orders';
-	$wpdb->pmpro_discount_codes = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes';
-	$wpdb->pmpro_discount_codes_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes_levels';
-	$wpdb->pmpro_discount_codes_uses = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes_uses';
+	$wpdb->pmpro_memberships_users = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_memberships_users';
+	$wpdb->pmpro_membership_levels = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_levels';
+	$wpdb->pmpro_membership_levelmeta = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_levelmeta';
+	$wpdb->pmpro_membership_orders = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_orders';
+	$wpdb->pmpro_discount_codes = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes';
+	$wpdb->pmpro_discount_codes_levels = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes_levels';
+	$wpdb->pmpro_discount_codes_uses = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes_uses';
 }
 add_action( 'init', 'pmpro_multisite_membership_init', 15 );
 
