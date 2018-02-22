@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: Paid Memberships Pro - Multisite Membership Add On Beta
- * Plugin URI: http://www.paidmembershipspro.com/add-ons/pmpro-network-subsites/
+ * Plugin Name: Paid Memberships Pro - Multisite Membership Add On
+ * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-multisite-membership/
  * Description: Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network.
  * Version: .4.3
  * Author: Stranger Studios
@@ -53,11 +53,11 @@ $wpdb->pmpro_discount_codes_levels = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_disc
 $wpdb->pmpro_discount_codes_uses = PMPRO_NETWORK_MAIN_DB_PREFIX . '_pmpro_discount_codes_uses';
 
 // get levels again
-function pmpron_init_get_levels() {
+function pmpro_multisite_membership_init_get_levels() {
 	global $wpdb, $membership_levels;
 	$membership_levels = $wpdb->get_results( "SELECT * FROM {$wpdb->pmpro_membership_levels}", OBJECT );
 }
-add_action( 'init', 'pmpron_init_get_levels', 1 );
+add_action( 'init', 'pmpro_multisite_membership_init_get_levels', 1 );
 
 /*
 	Hide admin stuff
@@ -87,14 +87,14 @@ add_action( 'init', 'pmpro_multisite_membership_init', 15 );
 /*
 	Function to add links to the plugin row meta
 */
-function pmpro_multisite_plugin_row_meta( $links, $file ) {
+function pmpro_multisite_membership_plugin_row_meta( $links, $file ) {
 	if ( strpos( $file, 'pmpro-network-subsite.php' ) !== false ) {
 		$new_links = array(
-			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/plus-add-ons/pmpro-network-membership/' ) . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-multisite-membership' ) ) . '">' . __( 'Docs', 'pmpro-multisite-membership' ) . '</a>',
-			'<a href="' . esc_url( 'http://paidmembershipspro.com/support/' ) . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro-multisite-membership' ) ) . '">' . __( 'Support', 'pmpro-multisite-membership' ) . '</a>',
+			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/pmpro-multisite-membership/' ) . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-multisite-membership' ) ) . '">' . __( 'Docs', 'pmpro-multisite-membership' ) . '</a>',
+			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/support/' ) . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro-multisite-membership' ) ) . '">' . __( 'Support', 'pmpro-multisite-membership' ) . '</a>',
 		);
 		$links = array_merge( $links, $new_links );
 	}
 	return $links;
 }
-add_filter( 'plugin_row_meta', 'pmpro_multisite_plugin_row_meta', 10, 2 );
+add_filter( 'plugin_row_meta', 'pmpro_multisite_membership_plugin_row_meta', 10, 2 );
