@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Paid Memberships Pro - Multisite Membership Add On
- * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-multisite-membership/
+ * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/
  * Description: Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network.
  * Version: .4.3
- * Author: Stranger Studios
- * Author URI: http://www.strangerstudios.com
+ * Author: Paid Memberships Pro
+ * Author URI: https://www.paidmembershipspro.com
  * Text-domain: pmpro-multisite-membership
  */
 
@@ -110,7 +110,7 @@ add_action( 'init', 'pmpro_multisite_membership_init', 15 );
 function pmpro_multisite_membership_plugin_row_meta( $links, $file ) {
 	if ( strpos( $file, 'pmpro-network-subsite.php' ) !== false ) {
 		$new_links = array(
-			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/pmpro-multisite-membership/' ) . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-multisite-membership' ) ) . '">' . __( 'Docs', 'pmpro-multisite-membership' ) . '</a>',
+			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/' ) . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-multisite-membership' ) ) . '">' . __( 'Docs', 'pmpro-multisite-membership' ) . '</a>',
 			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/support/' ) . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro-multisite-membership' ) ) . '">' . __( 'Support', 'pmpro-multisite-membership' ) . '</a>',
 		);
 		$links = array_merge( $links, $new_links );
