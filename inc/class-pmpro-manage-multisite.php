@@ -19,7 +19,7 @@ class PMPro_Manage_Multisite {
 	 *
 	 */
 	public static function add_admin_menu() {
-		add_menu_page( __( 'Memberships', 'pmpro-multisite-membership' ), __( 'Memberships', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-multisite-membership.php', array( __CLASS__, 'settings_page' ), 'dashicons-groups' );
+		add_menu_page( __( 'Memberships', 'pmpro-multisite-membership' ), __( 'Memberships', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-multisite-membership', array( __CLASS__, 'settings_page' ), 'dashicons-groups' );
 	}
 
 	/**
@@ -83,6 +83,9 @@ class PMPro_Manage_Multisite {
 			</div>
 		</form>
 		</div>
+		<style>
+			.error { display:none }
+		</style>
 		<?php
 
 		if( defined( 'PMPRO_DIR' ) ) { require_once( PMPRO_DIR . '/adminpages/admin_footer.php' ); }
