@@ -75,7 +75,9 @@ $wpdb->pmpro_discount_codes_uses = pmpro_multisite_membership_get_main_db_prefix
 // get levels again
 function pmpro_multisite_membership_init_get_levels() {
 	global $wpdb, $membership_levels;
-	$membership_levels = pmpro_getAllLevels( true, true, true );
+	if ( function_exists( 'pmpro_getAllLevels' ) ) {
+		$membership_levels = pmpro_getAllLevels( true, true, true );
+	}
 }
 add_action( 'init', 'pmpro_multisite_membership_init_get_levels', 1 );
 
