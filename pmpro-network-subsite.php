@@ -68,9 +68,14 @@ $wpdb->pmpro_memberships_users = pmpro_multisite_membership_get_main_db_prefix()
 $wpdb->pmpro_membership_levels = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_levels';
 $wpdb->pmpro_membership_levelmeta = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_levelmeta';
 $wpdb->pmpro_membership_orders = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_orders';
+$wpdb->pmpro_membership_ordermeta = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_ordermeta';
 $wpdb->pmpro_discount_codes = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes';
 $wpdb->pmpro_discount_codes_levels = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes_levels';
 $wpdb->pmpro_discount_codes_uses = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes_uses';
+$wpdb->pmpro_subscriptions = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_subscriptions';
+$wpdb->pmpro_subscriptionmeta = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_subscriptionmeta';
+$wpdb->pmpro_groups = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_groups';
+$wpdb->pmpro_membership_levels_groups = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_levels_groups';
 
 // get levels again
 function pmpro_multisite_membership_init_get_levels() {
@@ -100,9 +105,14 @@ function pmpro_multisite_membership_init() {
 	$wpdb->pmpro_membership_levels = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_levels';
 	$wpdb->pmpro_membership_levelmeta = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_levelmeta';
 	$wpdb->pmpro_membership_orders = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_orders';
+	$wpdb->pmpro_membership_ordermeta = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_ordermeta';
 	$wpdb->pmpro_discount_codes = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes';
 	$wpdb->pmpro_discount_codes_levels = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes_levels';
 	$wpdb->pmpro_discount_codes_uses = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_discount_codes_uses';
+	$wpdb->pmpro_subscriptions = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_subscriptions';
+	$wpdb->pmpro_subscriptionmeta = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_subscriptionmeta';
+	$wpdb->pmpro_groups = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_groups';
+	$wpdb->pmpro_membership_levels_groups = pmpro_multisite_membership_get_main_db_prefix() . 'pmpro_membership_levels_groups';
 }
 add_action( 'init', 'pmpro_multisite_membership_init', 15 );
 
