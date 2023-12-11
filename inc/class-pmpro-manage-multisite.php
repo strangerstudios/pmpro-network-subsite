@@ -20,8 +20,18 @@ class PMPro_Manage_Multisite {
 	 */
 	public static function add_admin_menu() {
 		add_menu_page( __( 'Memberships', 'pmpro-multisite-membership' ), __( 'Memberships', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-multisite-membership', array( __CLASS__, 'settings_page' ), 'dashicons-groups' );
-	}
 
+		// Add submenu advanced settings page.
+		add_submenu_page( 'pmpro-multisite-membership', esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-advancedsettings', 'pmpro_advancedsettings' );
+
+		?>
+		<style>
+		.pmpro_admin .nav-tab-wrapper, .pmpro_admin .subsubsub {
+  			display:none;
+		}
+		</style>
+		<?php
+	}
 	/**
 	 * Remove the admin bar on subsites
 	 *
