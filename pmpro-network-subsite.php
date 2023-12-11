@@ -36,6 +36,12 @@ function pmpro_multisite_membership_get_main_db_prefix() {
 include( 'inc/class-pmpro-manage-multisite.php' );
 PMPro_Manage_Multisite::init();
 
+// Load text domain
+function pmpro_multisite_membership_load_textdomain() {
+	load_plugin_textdomain( 'pmpro-network-subsite', false, basename( dirname( __FILE__ ) ) . '/languages' ); 
+}
+add_action( 'init', 'pmpro_multisite_membership_load_textdomain' );
+
 /*
 	Make sure this plugin loads after Paid Memberships Pro
 */
