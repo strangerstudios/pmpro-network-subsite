@@ -19,7 +19,7 @@ class PMPro_Manage_Multisite {
 	 *
 	 */
 	public static function add_admin_menu() {
-		add_menu_page( esc_html__( 'Memberships', 'pmpro-multisite-membership' ), esc_html__( 'Memberships', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-multisite-membership', array( __CLASS__, 'settings_page' ), 'dashicons-groups' );
+		add_menu_page( esc_html__( 'Memberships', 'pmpro-network-subsite' ), esc_html__( 'Memberships', 'pmpro-network-subsite' ), 'manage_options', 'pmpro-network-subsite', array( __CLASS__, 'settings_page' ), 'dashicons-groups' );
 	}
 
 	/**
@@ -46,7 +46,7 @@ class PMPro_Manage_Multisite {
 
 			?>
 			<div class="notice notice-success is-dismissible">
-		        <p><?php esc_html_e( 'The source site has been updated. Make sure that PMPro IS active on that site and the Multisite Membership Add On IS NOT active there.', 'pmpro-multisite-membership' ); ?></p>
+		        <p><?php esc_html_e( 'The source site has been updated. Make sure that PMPro IS active on that site and the Multisite Membership Add On IS NOT active there.', 'pmpro-network-subsite' ); ?></p>
 		    </div>
 			<?php
 		}
@@ -56,10 +56,10 @@ class PMPro_Manage_Multisite {
 		// Show the form.
 		?>
 		<div class="wrap">
-		<h2><?php esc_html_e( 'PMPro Multisite Membership Settings', 'pmpro-multisite-membership' ); ?></h2>
-		<p><?php printf( esc_html__( 'You have activated the %s on this site, which means that you will be using PMPro settings from another site in your Network to control site access.', 'pmpro-multisite-membership' ), '<strong>' . __( 'Multisite Membership Add On', 'pmpro-multisite-membership' ) . '</strong>' );?></p>
+		<h2><?php esc_html_e( 'PMPro Multisite Membership Settings', 'pmpro-network-subsite' ); ?></h2>
+		<p><?php printf( esc_html__( 'You have activated the %s on this site, which means that you will be using PMPro settings from another site in your Network to control site access.', 'pmpro-network-subsite' ), '<strong>' . __( 'Multisite Membership Add On', 'pmpro-network-subsite' ) . '</strong>' );?></p>
 
-		<p><?php esc_html_e( 'Select the site you would like to get PMPro level data from and click Update.', 'pmpro-multisite-membership' );?></p>
+		<p><?php esc_html_e( 'Select the site you would like to get PMPro level data from and click Update.', 'pmpro-network-subsite' );?></p>
 
 		<form id="select-site-form" action="" method="POST">
 			<div>
@@ -79,7 +79,7 @@ class PMPro_Manage_Multisite {
 					}
 				?>	
 				</select>
-				<input type="submit" name="select-site-submit" id="select_site_submit" class="button-primary" value="<?php esc_attr_e( 'Update', 'pmpro-multisite-membership' ); ?>"/>
+				<input type="submit" name="select-site-submit" id="select_site_submit" class="button-primary" value="<?php esc_attr_e( 'Update', 'pmpro-network-subsite' ); ?>"/>
 			</div>
 		</form>
 		</div>
