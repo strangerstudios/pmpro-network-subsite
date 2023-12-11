@@ -26,9 +26,7 @@ class PMPro_Manage_Multisite {
 
 		?>
 		<style>
-		.pmpro_admin .nav-tab-wrapper, .pmpro_admin .subsubsub {
-  			display:none;
-		}
+		.pmpro_admin .nav-tab-wrapper, .pmpro_admin .subsubsub {display:none;}
 		</style>
 		<?php
 	}
