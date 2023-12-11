@@ -112,8 +112,8 @@ add_action( 'init', 'pmpro_multisite_membership_init', 15 );
 function pmpro_multisite_membership_plugin_row_meta( $links, $file ) {
 	if ( strpos( $file, 'pmpro-network-subsite.php' ) !== false ) {
 		$new_links = array(
-			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/' ) . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-multisite-membership' ) ) . '">' . __( 'Docs', 'pmpro-multisite-membership' ) . '</a>',
-			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/support/' ) . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro-multisite-membership' ) ) . '">' . __( 'Support', 'pmpro-multisite-membership' ) . '</a>',
+			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/' ) . '" title="' . esc_attr__( 'View Documentation', 'pmpro-multisite-membership' ) . '">' . esc_html__( 'Docs', 'pmpro-multisite-membership' ) . '</a>',
+			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/support/' ) . '" title="' . esc_attr__( 'Visit Customer Support Forum', 'pmpro-multisite-membership' ) . '">' . esc_html__( 'Support', 'pmpro-multisite-membership' ) . '</a>',
 		);
 		$links = array_merge( $links, $new_links );
 	}
