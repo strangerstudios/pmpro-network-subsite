@@ -20,14 +20,17 @@ class PMPro_Manage_Multisite {
 	 */
 	public static function add_admin_menu() {
 
-		add_menu_page( esc_html__( 'Memberships', 'pmpro-network-subsite' ), esc_html__( 'Memberships', 'pmpro-network-subsite' ), 'manage_options', 'pmpro-network-subsite', array( __CLASS__, 'settings_page' ), 'dashicons-groups' );
+		add_menu_page( esc_html__( 'Settings', 'pmpro-network-subsite' ), esc_html__( 'Memberships', 'pmpro-network-subsite' ), 'manage_options', 'pmpro-network-subsite', array( __CLASS__, 'settings_page' ), 'dashicons-groups' );
 
 		// Add submenu advanced settings page.
-		add_submenu_page( 'pmpro-multisite-membership', esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-advancedsettings', 'pmpro_advancedsettings' );
+		add_submenu_page( 'pmpro-network-subsite', 'Settings', 'Settings', 'read', 'pmpro-network-subsite',  array( __CLASS__, 'settings_page' ) ); //Add this so we can have a menu slug for the main menu link
+		add_submenu_page( 'pmpro-network-subsite', esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-advancedsettings', 'pmpro_advancedsettings' );
 
 		?>
 		<style>
 		.pmpro_admin .nav-tab-wrapper, .pmpro_admin .subsubsub {display:none;}
+		.pmpro_admin_section-checkout-settings {display:none;}
+		.pmpro_admin-pmpro-advancedsettings hr {display:none;}
 		</style>
 		<?php
 	}
