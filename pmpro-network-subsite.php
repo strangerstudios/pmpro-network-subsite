@@ -24,6 +24,10 @@ add_action( 'admin_notices', 'pmpro_multisite_show_admin_warning' );
 
 // Deactivate this plugin if it's not a multisite automatically.
 function pmpro_multisite_deactivate_self() {
+	if ( is_multisite() ) {
+		return;
+	}
+
 	deactivate_plugins( plugin_basename( __FILE__ ) );
 }
 add_action( 'admin_init', 'pmpro_multisite_deactivate_self' );
