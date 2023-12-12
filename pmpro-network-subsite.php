@@ -10,6 +10,28 @@
  * Domain Path: /languages
  */
 
+function pmpro_multisite_show_admin_warning() {
+	if ( ! is_multisite() ) {
+		?>
+		<div class="error">
+			<p><?php esc_html_e( 'The Paid Memberships Pro - Multisite Membership Add-On is compatible only with multisite installations. We have automatically deactivated this plugin.', 'pmpro-network-subsite' ); ?></p>
+		</div>
+		<?php
+	}
+}
+add_action( 'admin_notices', 'pmpro_multisite_show_admin_warning' );
+
+
+// Deactivate this plugin if it's not a multisite automatically.
+function pmpro_multisite_deactivate_self() {
+	deactivate_plugins( plugin_basename( __FILE__ ) );
+}
+add_action( 'admin_init', 'pmpro_multisite_deactivate_self' );
+
+// Don't run this plugin if it's not a multisite.
+if ( ! is_multisite() ) {
+	return;
+}
 /** 
  * Get the Main DB Prefix
  *
