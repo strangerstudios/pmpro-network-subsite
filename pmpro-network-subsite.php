@@ -195,6 +195,33 @@ function pmpro_multisite_pmpro_url( $url, $page, $querystring, $scheme ) {
 	return $url;
 }
 add_filter( 'pmpro_url', 'pmpro_multisite_pmpro_url', 10, 4 );
+
+
+/**
+ * Remove cron jobs from subsites to prevent them from running.
+ * @since TBD
+ */
+function pmpro_multisite_remove_crons() {
+	$crons = apply_filters( 'pmpro_multisite_core_crons', pmpro_get_crons() );
+
+	foreach ( $crons as $hook => $cron ) {
+		wp_clear_scheduled_hook( $hook );
+	}
+
+	// Remove the cron jobs from the main site too.
+	remove_filter( 'pre_get_ready_cron_jobs', 'pmpro_handle_schedule_crons_on_cron_ready_check' );
+}
+add_action( 'admin_init', 'pmpro_multisite_remove_crons' );
+
+/**
+ * Reactivate PMPro cron jobs when this plugin is deactivated.
+ * @since TBD
+ */
+function pmpro_multisite_deactivation() {
+	pmpro_maybe_schedule_crons();
+}
+register_deactivation_hook( __FILE__, 'pmpro_multisite_deactivation' );
+
 /*
 	Function to add links to the plugin row meta
 */
