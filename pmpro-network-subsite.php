@@ -10,6 +10,9 @@
  * Domain Path: /languages
  */
 
+/**
+ * Show an admin notice that the plugin has been deactivated.
+ */
 function pmpro_multisite_show_admin_warning() {
 	if ( ! is_multisite() ) {
 		?>
@@ -21,8 +24,9 @@ function pmpro_multisite_show_admin_warning() {
 }
 add_action( 'admin_notices', 'pmpro_multisite_show_admin_warning' );
 
-
-// Deactivate this plugin if it's not a multisite automatically.
+/**
+ * Deactivate this plugin automatically if we're not on a multisite installation.
+ */
 function pmpro_multisite_deactivate_self() {
 	if ( is_multisite() ) {
 		return;
@@ -36,6 +40,11 @@ add_action( 'admin_init', 'pmpro_multisite_deactivate_self' );
 if ( ! is_multisite() ) {
 	return;
 }
+
+
+// Fake that PMPro is ready since the parent site is handling almost everything.
+add_filter( 'pmpro_is_ready', '__return_true' );
+
 /** 
  * Get the Main DB Prefix
  *
@@ -149,6 +158,42 @@ function pmpro_multisite_membership_init() {
 }
 add_action( 'init', 'pmpro_multisite_membership_init', 15 );
 
+/**
+ * Replace the global $pmpro_pages with the page ID's of the main network site.
+ * @return array $pmpro_pages The array of page ID's for the main network site.
+ */
+function pmpro_multisite_get_parent_site_pages() {
+	global $pmpro_pages;
+
+	// Get main site ID
+	$main_site_id = get_main_site_id();
+
+	foreach( $pmpro_pages as $page_slug => $page_id ) {
+		$pmpro_pages[ $page_slug ] = get_blog_option( $main_site_id, 'pmpro_' . $page_slug . '_page_id' );
+	}
+}
+add_action( 'init', 'pmpro_multisite_get_parent_site_pages', 20 );
+
+/**
+ * Filter the pmpro_url URLs when called on the subsite.
+ * @return string $url The URL of the main site for equivalent page.
+ */
+function pmpro_multisite_pmpro_url( $url, $page, $querystring, $scheme ) {
+	global $pmpro_pages;
+
+	// Get main site URL of the network.
+	$main_site_url = get_blog_option( get_main_site_id(), 'siteurl' );
+
+	// Loop through $pages and generate the URL
+	foreach( $pmpro_pages as $page_slug => $page_id ) {
+		if ( $page == $page_slug ) {
+			// Add query arg to the URL 
+			$url = add_query_arg( 'page_id', $page_id, $main_site_url);
+		}
+	}
+	return $url;
+}
+add_filter( 'pmpro_url', 'pmpro_multisite_pmpro_url', 10, 4 );
 /*
 	Function to add links to the plugin row meta
 */
