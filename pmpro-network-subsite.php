@@ -167,7 +167,7 @@ function pmpro_multisite_get_parent_site_pages() {
 	global $pmpro_pages;
 
 	// Get main site ID
-	$main_site_id = get_main_site_id();
+	$main_site_id = pmpro_multisite_get_main_site_ID();
 
 	foreach( $pmpro_pages as $page_slug => $page_id ) {
 		$pmpro_pages[ $page_slug ] = get_blog_option( $main_site_id, 'pmpro_' . $page_slug . '_page_id' );
@@ -183,7 +183,7 @@ function pmpro_multisite_pmpro_url( $url, $page, $querystring, $scheme ) {
 	global $pmpro_pages;
 
 	// Get main site URL of the network.
-	$main_site_url = get_blog_option( get_main_site_id(), 'siteurl' );
+	$main_site_url = get_blog_option( pmpro_multisite_get_main_site_ID(), 'siteurl' );
 
 	// Loop through $pages and generate the URL
 	foreach( $pmpro_pages as $page_slug => $page_id ) {
@@ -221,6 +221,37 @@ function pmpro_multisite_deactivation() {
 	pmpro_maybe_schedule_crons();
 }
 register_deactivation_hook( __FILE__, 'pmpro_multisite_deactivation' );
+
+/**
+ * Helper to get the Site ID of the stored site.
+ *
+ * @return void
+ */
+function pmpro_multisite_get_main_site_ID() {
+	global $wpdb;
+	if ( ! get_site_transient( 'pmpro_multisite_membership_main_site_id' ) ) {
+		$prefix = pmpro_multisite_membership_get_main_db_prefix();
+		$main_site_id = 0;
+		
+		// Loop through the sites to get the main site ID we're referencing.
+		$sites = get_sites();
+		foreach( $sites as $site ) {
+			$bool_val = SUBDOMAIN_INSTALL;
+			$siteurl = $bool_val ? $site->domain : $site->domain . $site->path;
+
+			if ( $wpdb->get_blog_prefix( $site->blog_id ) === $prefix ) {
+				$main_site_id = (int) $site->blog_id;
+			}
+		}
+
+		// Set the transient here for a really long time, we clean it up anyway.
+		set_site_transient( 'pmpro_multisite_membership_main_site_id', $main_site_id, YEAR_IN_SECONDS );
+	} else {
+		$main_site_id = get_site_transient( 'pmpro_multisite_membership_main_site_id' );
+	}
+
+	return (int) $main_site_id;
+}
 
 /*
 	Function to add links to the plugin row meta

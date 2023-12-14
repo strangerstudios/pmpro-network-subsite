@@ -55,7 +55,7 @@ class PMPro_Manage_Multisite {
 		if( isset( $_POST['main_db_prefix'] ) && check_admin_referer( 'pmpro_multisite_membership_settings', 'pmpro_multisite_membership_settings_nonce' ) ) {
 			$main_db_prefix = sanitize_text_field( $_POST['main_db_prefix'] );
 			update_site_option( 'pmpro_multisite_membership_main_db_prefix', $main_db_prefix );
-
+			delete_site_transient( 'pmpro_multisite_membership_main_site_id' ); // Clear the transient on save.
 			?>
 			<div class="notice notice-success is-dismissible">
 		        <p><?php esc_html_e( 'The source site has been updated. Make sure that PMPro IS active on that site and the Multisite Membership Add On IS NOT active there.', 'pmpro-network-subsite' ); ?></p>
