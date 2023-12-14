@@ -187,7 +187,7 @@ function pmpro_multisite_pmpro_url( $url, $page, $querystring, $scheme ) {
 
 	// Loop through $pages and generate the URL
 	foreach( $pmpro_pages as $page_slug => $page_id ) {
-		if ( $page == $page_slug ) {
+		if ( $page == $page_slug && ! empty( $page_id ) ) {
 			// Add query arg to the URL 
 			$url = add_query_arg( 'page_id', $page_id, $main_site_url);
 		}
