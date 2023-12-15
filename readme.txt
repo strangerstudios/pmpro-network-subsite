@@ -37,7 +37,7 @@ Please post it in the GitHub issue tracker here: https://github.com/strangerstud
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
-= 0.5 - TBD =
+= 0.5 - 2023-12-15 =
 * SECURITY: Improved sanitization and escaping of contents of the plugin.
 * ENHANCEMENT: Added support for Multiple Memberships Per User and Paid Memberships Pro 3.0.
 * ENHANCEMENT: Added localization functionality and it is now translatable.
