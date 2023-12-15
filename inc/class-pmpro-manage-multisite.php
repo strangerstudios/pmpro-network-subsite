@@ -31,6 +31,7 @@ class PMPro_Manage_Multisite {
 		.pmpro_admin .nav-tab-wrapper, .pmpro_admin .subsubsub {display:none;}
 		.pmpro_admin_section-checkout-settings {display:none;}
 		.pmpro_admin-pmpro-advancedsettings hr {display:none;}
+		.pmpro-nav-primary, .pmpro-nav-secondary {display:none;}
 		</style>
 		<?php
 	}
