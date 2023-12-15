@@ -1,0 +1,87 @@
+# Copyright (C) 2023 Paid Memberships Pro
+# This file is distributed under the same license as the Paid Memberships Pro - Multisite Membership Add On plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Paid Memberships Pro - Multisite Membership Add On 0.5\n"
+"Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
+"Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
+"Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-12-15T11:31:51+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.9.0\n"
+"X-Domain: pmpro-network-subsite\n"
+
+#. Plugin Name of the plugin
+msgid "Paid Memberships Pro - Multisite Membership Add On"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network."
+msgstr ""
+
+#. Author of the plugin
+msgid "Paid Memberships Pro"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.paidmembershipspro.com"
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:23
+msgid "Settings"
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:23
+msgid "Memberships"
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:62
+msgid "The source site has been updated. Make sure that PMPro IS active on that site and the Multisite Membership Add On IS NOT active there."
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:72
+msgid "PMPro Multisite Membership Settings"
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:73
+msgid "You have activated the %s on this site, which means that you will be using PMPro settings from another site in your Network to control site access."
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:73
+msgid "Multisite Membership Add On"
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:75
+msgid "Select the site you would like to get PMPro level data from and click Update."
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:95
+msgid "Update"
+msgstr ""
+
+#: pmpro-network-subsite.php:34
+msgid "The Paid Memberships Pro - Multisite Membership Add-On is compatible only with multisite installations. We have automatically deactivated this plugin."
+msgstr ""
+
+#: pmpro-network-subsite.php:262
+msgid "View Documentation"
+msgstr ""
+
+#: pmpro-network-subsite.php:262
+msgid "Docs"
+msgstr ""
+
+#: pmpro-network-subsite.php:263
+msgid "Visit Customer Support Forum"
+msgstr ""
+
+#: pmpro-network-subsite.php:263
+msgid "Support"
+msgstr ""
