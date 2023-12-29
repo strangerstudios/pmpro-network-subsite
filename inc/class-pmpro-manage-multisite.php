@@ -26,14 +26,17 @@ class PMPro_Manage_Multisite {
 		add_submenu_page( 'pmpro-network-subsite', 'Settings', 'Settings', 'read', 'pmpro-network-subsite',  array( __CLASS__, 'settings_page' ) ); //Add this so we can have a menu slug for the main menu link
 		add_submenu_page( 'pmpro-network-subsite', esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-advancedsettings', 'pmpro_advancedsettings' );
 
-		?>
-		<style>
-		.pmpro_admin .nav-tab-wrapper, .pmpro_admin .subsubsub {display:none;}
-		.pmpro_admin_section-checkout-settings {display:none;}
-		.pmpro_admin-pmpro-advancedsettings hr {display:none;}
-		.pmpro-nav-primary, .pmpro-nav-secondary {display:none;}
-		</style>
-		<?php
+		// Only load the styling when we're on one of our admin pages.
+		if ( ! empty( $_REQUEST['page'] ) && ( $_REQUEST['page'] == 'pmpro-network-subsite' || $_REQUEST['page'] == 'pmpro-advancedsettings' ) ) {
+			?>
+			<style>
+			.pmpro_admin .nav-tab-wrapper, .pmpro_admin .subsubsub {display:none;}
+			.pmpro_admin_section-checkout-settings {display:none;}
+			.pmpro_admin-pmpro-advancedsettings hr {display:none;}
+			.pmpro-nav-primary, .pmpro-nav-secondary {display:none;}
+			</style>
+			<?php
+		}
 	}
 	/**
 	 * Remove the admin bar on subsites
