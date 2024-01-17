@@ -169,9 +169,14 @@ function pmpro_multisite_get_parent_site_pages() {
 	// Get main site ID
 	$main_site_id = pmpro_multisite_get_main_site_ID();
 
+	
 	foreach( $pmpro_pages as $page_slug => $page_id ) {
+		if ( $page_slug == 'login' ) {
+			continue;
+		}
 		$pmpro_pages[ $page_slug ] = get_blog_option( $main_site_id, 'pmpro_' . $page_slug . '_page_id' );
 	}
+
 }
 add_action( 'init', 'pmpro_multisite_get_parent_site_pages', 20 );
 
@@ -187,6 +192,9 @@ function pmpro_multisite_pmpro_url( $url, $page, $querystring, $scheme ) {
 
 	// Loop through $pages and generate the URL
 	foreach( $pmpro_pages as $page_slug => $page_id ) {
+		if ( $page_slug == 'login' ) {
+			continue;
+		}
 		if ( $page == $page_slug && ! empty( $page_id ) ) {
 			// Add query arg to the URL 
 			$url = add_query_arg( 'page_id', $page_id, $main_site_url);
