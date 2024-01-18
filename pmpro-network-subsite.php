@@ -3,7 +3,7 @@
  * Plugin Name: Paid Memberships Pro - Multisite Membership Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/
  * Description: Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network.
- * Version: 0.5
+ * Version: 0.5.1
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
  * Text-domain: pmpro-network-subsite
@@ -166,10 +166,14 @@ add_action( 'init', 'pmpro_multisite_membership_init', 15 );
 function pmpro_multisite_get_parent_site_pages() {
 	global $pmpro_pages;
 
+	// Only if the constant is defined try to rewrite.
+	if ( ! defined( 'PMPRO_MULSITIE_REWRITE_URLS' ) ) {
+		return;
+	}
+
 	// Get main site ID
 	$main_site_id = pmpro_multisite_get_main_site_ID();
 
-	
 	foreach( $pmpro_pages as $page_slug => $page_id ) {
 		if ( $page_slug == 'login' ) {
 			continue;
@@ -187,6 +191,11 @@ add_action( 'init', 'pmpro_multisite_get_parent_site_pages', 20 );
 function pmpro_multisite_pmpro_url( $url, $page, $querystring, $scheme ) {
 	global $pmpro_pages;
 
+	// Only if the constant is defined try to rewrite URLS.
+	if ( ! defined( 'PMPRO_MULSITIE_REWRITE_URLS' ) ) {
+		return $url;
+	}
+
 	// Get main site URL of the network.
 	$main_site_url = get_blog_option( pmpro_multisite_get_main_site_ID(), 'siteurl' );
 
@@ -202,7 +211,7 @@ function pmpro_multisite_pmpro_url( $url, $page, $querystring, $scheme ) {
 	}
 	return $url;
 }
-add_filter( 'pmpro_url', 'pmpro_multisite_pmpro_url', 10, 4 );
+// add_filter( 'pmpro_url', 'pmpro_multisite_pmpro_url', 10, 4 );
 
 
 /**
