@@ -167,7 +167,7 @@ function pmpro_multisite_get_parent_site_pages() {
 	global $pmpro_pages;
 
 	// Only if the constant is defined try to rewrite.
-	if ( ! defined( 'PMPRO_MULSITIE_REWRITE_URLS' ) ||  ! PMPRO_MULSITIE_REWRITE_URLS ) {
+	if ( ! defined( 'PMPRO_MULTISITE_REWRITE_URLS' ) ||  ! PMPRO_MULTISITE_REWRITE_URLS ) {
 		return;
 	}
 
@@ -192,7 +192,7 @@ function pmpro_multisite_pmpro_url( $url, $page, $querystring, $scheme ) {
 	global $pmpro_pages;
 
 	// Only if the constant is defined try to rewrite URLS.
-	if ( ! defined( 'PMPRO_MULSITIE_REWRITE_URLS' ) ||  ! PMPRO_MULSITIE_REWRITE_URLS ) {
+	if ( ! defined( 'PMPRO_MULTISITE_REWRITE_URLS' ) ||  ! PMPRO_MULTISITE_REWRITE_URLS ) {
 		return $url;
 	}
 
