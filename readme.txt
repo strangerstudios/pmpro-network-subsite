@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, network, network membership, multisite, wpmu
 Requires at least: 5.2
 Tested up to: 6.4
-Stable tag: 0.5.1
+Stable tag: 0.5.2
 
 Manage memberships at the network's main site (the primary domain of the network) and provide/restrict access on subsites in the network.
 
@@ -37,6 +37,9 @@ Please post it in the GitHub issue tracker here: https://github.com/strangerstud
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+= 0.5.2 - 2024-03-05 =
+* BUG FIX: Fixed a minor typo regarding the PHP constant "PMPRO_MULTISITE_REWRITE_URLS" released in V0.5.1
+
 = 0.5.1 - 2024-01-18 =
 * BUG FIX: Fixed an issue where custom CSS in the admin area was causing issues on non Paid Memberships Pro pages.
 * REFACTOR: Stopped automatically swapping out the main sites URLs for PMPro pages when on a subsite. Developers need to enable this functionality via a PHP constant "PMPRO_MULTISITE_REWRITE_URLS".

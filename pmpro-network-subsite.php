@@ -3,7 +3,7 @@
  * Plugin Name: Paid Memberships Pro - Multisite Membership Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/
  * Description: Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network.
- * Version: 0.5.1
+ * Version: 0.5.2
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
  * Text-domain: pmpro-network-subsite
