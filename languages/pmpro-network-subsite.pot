@@ -2,35 +2,40 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Multisite Membership Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Multisite Membership Add On 0.5.1\n"
+"Project-Id-Version: Paid Memberships Pro - Multisite Membership Add On 0.5.2\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-01-18T08:08:47+00:00\n"
+"POT-Creation-Date: 2024-03-05T09:39:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.9.0\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: pmpro-network-subsite\n"
 
 #. Plugin Name of the plugin
+#: pmpro-network-subsite.php
 msgid "Paid Memberships Pro - Multisite Membership Add On"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: pmpro-network-subsite.php
 msgid "https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/"
 msgstr ""
 
 #. Description of the plugin
+#: pmpro-network-subsite.php
 msgid "Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network."
 msgstr ""
 
 #. Author of the plugin
+#: pmpro-network-subsite.php
 msgid "Paid Memberships Pro"
 msgstr ""
 
 #. Author URI of the plugin
+#: pmpro-network-subsite.php
 msgid "https://www.paidmembershipspro.com"
 msgstr ""
 
