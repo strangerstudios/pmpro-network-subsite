@@ -169,7 +169,7 @@ function pmpro_multisite_get_parent_site_pages() {
 	if ( empty( $pmpro_pages ) ) {
 		return;
 	}
-	
+
 	// Only if the constant is defined try to rewrite.
 	if ( ! defined( 'PMPRO_MULTISITE_REWRITE_URLS' ) ||  ! PMPRO_MULTISITE_REWRITE_URLS ) {
 		return;
@@ -223,6 +223,11 @@ add_filter( 'pmpro_url', 'pmpro_multisite_pmpro_url', 10, 4 );
  * @since 0.5
  */
 function pmpro_multisite_remove_crons() {
+	
+	if ( ! function_exists( 'pmpro_get_crons' ) ) {
+		return;
+	}
+
 	$crons = apply_filters( 'pmpro_multisite_core_crons', pmpro_get_crons() );
 
 	foreach ( $crons as $hook => $cron ) {
