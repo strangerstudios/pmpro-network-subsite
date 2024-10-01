@@ -219,6 +219,10 @@ add_filter( 'pmpro_url', 'pmpro_multisite_pmpro_url', 10, 4 );
  * @since TBD
  */
 function pmpro_multisite_remove_crons() {
+	//bail if pmpro get crons doesn't exist
+	if ( ! function_exists( 'pmpro_get_crons' ) ) {
+		return;
+	}
 	$crons = apply_filters( 'pmpro_multisite_core_crons', pmpro_get_crons() );
 
 	foreach ( $crons as $hook => $cron ) {
