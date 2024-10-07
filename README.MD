@@ -3,7 +3,7 @@
 # [Paid Memberships Pro - Multisite Membership Add On](https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/) #
 [comment]: # (Generate badges from shields.io, only works for .org plugins to get other stats etc. We'd have to create our own endpoints for Premium plugins)
 
-![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg?style=flat-square)
+![License](https://img.shields.io/badge/license-GPL--3.0%2B-red.svg?style=flat-square)
 
 ### Welcome to the Paid Memberships Pro - Multisite Membership Add On GitHub Repository
 Manage memberships at the network’s main site (the primary domain of the network) and provide/restrict access on subsites in the network.

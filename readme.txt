@@ -1,17 +1,19 @@
 === Paid Memberships Pro - Multisite Membership Add On ===
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, network, network membership, multisite, wpmu
-Requires at least: 5.2
-Tested up to: 6.4
-Stable tag: 0.5.2
+Requires at least: 5.4
+Tested up to: 6.6
+Stable tag: 0.5.3
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Manage memberships at the network's main site (the primary domain of the network) and provide/restrict access on subsites in the network.
+Centralize membership checkout, login, and admin on the main network site and restrict access to content across all of your subsites.
 
 == Description ==
 
-This add on allows you to sell memberships at the main site that provide access to members-only content on a site or sites throughout the entire multisite network.
+The Multisite Membership Add On is a must-have for membership sites built on a WordPress multisite or network setup. The plugin provides a central place to handle member registrations and management at the main network site, then unlocks access to various subsites based on the member’s levels.
 
-All of the membership levels and users are managed on the main network site. The subsites look to the main network site's database to mirror the membership levels available and to check a user's access.
+Whether you are managing a community hub, offering educational courses, or segmenting your subsites by content category, our Add On ensures that each subsite can have its own unique user experiences, while keeping membership management unified.
 
 == Installation ==
 
@@ -19,8 +21,9 @@ All of the membership levels and users are managed on the main network site. The
 1. On your main network site, activate and configure Paid Memberships Pro by following the Initial Plugin Setup guide.
 1. Upload the 'pmpro-network-subsite' directory to the 'wp-content/plugins/' directory of your WordPress Multisite environment.
 1. For each site in your network that has member content, navigate to the site's Dashboard > Plugins. Activate Paid Memberships Pro AND the Multisite Membership Add On.
+1. On the child sites in the network, navigate to the Memberships settings page and assign the appropriate site as the Main Network Site.
 1. DO NOT activate the 'pmpro-network-subsite' plugin on the “Main” site (i.e. where people checkout) of your network.
-1. Make sure that the constant PMPRO_NETWORK_MAIN_DB_PREFIX is properly defined for your main network site in your wp-config.php file. For example: define('PMPRO_NETWORK_MAIN_DB_PREFIX', 'wp');
+1. We also recommend defining the PMPRO_MULTISITE_REWRITE_URLS in your wp-config.php file. For example: define('PMPRO_MULTISITE_REWRITE_URLS', true );
 
 You will now be able to create members-only content on subsites in the network. The membership levels of your main site are mirrored in each subsite.
 
@@ -37,6 +40,11 @@ Please post it in the GitHub issue tracker here: https://github.com/strangerstud
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+
+= 0.5.3 - 2024-10-07 =
+* ENHANCEMENT: Improved settings UI for compatibility with PMPro admin screens. #38 (@MaximilianoRicoTabo, @kimcoleman)
+* BUG FIX: Fixed errors when PMPro core not active. #35 (@andrewlimaza)
+
 = 0.5.2 - 2024-03-05 =
 * BUG FIX: Fixed a minor typo regarding the PHP constant "PMPRO_MULTISITE_REWRITE_URLS" released in V0.5.1
 
