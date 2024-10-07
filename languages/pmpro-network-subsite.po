@@ -2,16 +2,16 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Multisite Membership Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Multisite Membership Add On 0.5.2\n"
+"Project-Id-Version: Paid Memberships Pro - Multisite Membership Add On 0.5.3\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-03-05T09:39:10+00:00\n"
+"POT-Creation-Date: 2024-10-07T17:53:34+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.10.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: pmpro-network-subsite\n"
 
 #. Plugin Name of the plugin
@@ -49,6 +49,7 @@ msgstr ""
 
 #: inc/class-pmpro-manage-multisite.php:62
 #: inc/class-pmpro-manage-multisite.php:65
+#: inc/class-pmpro-manage-multisite.php:67
 msgid "The source site has been updated. Make sure that PMPro IS active on that site and the Multisite Membership Add On IS NOT active there."
 msgstr ""
 
@@ -59,21 +60,25 @@ msgstr ""
 
 #: inc/class-pmpro-manage-multisite.php:73
 #: inc/class-pmpro-manage-multisite.php:76
+#: inc/class-pmpro-manage-multisite.php:88
 msgid "You have activated the %s on this site, which means that you will be using PMPro settings from another site in your Network to control site access."
 msgstr ""
 
 #: inc/class-pmpro-manage-multisite.php:73
 #: inc/class-pmpro-manage-multisite.php:76
+#: inc/class-pmpro-manage-multisite.php:88
 msgid "Multisite Membership Add On"
 msgstr ""
 
 #: inc/class-pmpro-manage-multisite.php:75
 #: inc/class-pmpro-manage-multisite.php:78
+#: inc/class-pmpro-manage-multisite.php:89
 msgid "Select the site you would like to get PMPro level data from and click Update."
 msgstr ""
 
 #: inc/class-pmpro-manage-multisite.php:95
 #: inc/class-pmpro-manage-multisite.php:98
+#: inc/class-pmpro-manage-multisite.php:123
 msgid "Update"
 msgstr ""
 
@@ -83,20 +88,41 @@ msgstr ""
 
 #: pmpro-network-subsite.php:262
 #: pmpro-network-subsite.php:279
+#: pmpro-network-subsite.php:290
 msgid "View Documentation"
 msgstr ""
 
 #: pmpro-network-subsite.php:262
 #: pmpro-network-subsite.php:279
+#: pmpro-network-subsite.php:290
 msgid "Docs"
 msgstr ""
 
 #: pmpro-network-subsite.php:263
 #: pmpro-network-subsite.php:280
+#: pmpro-network-subsite.php:291
 msgid "Visit Customer Support Forum"
 msgstr ""
 
 #: pmpro-network-subsite.php:263
 #: pmpro-network-subsite.php:280
+#: pmpro-network-subsite.php:291
 msgid "Support"
+msgstr ""
+
+#. Description of the plugin
+#: pmpro-network-subsite.php
+msgid "Centralize membership checkout, login, and admin on the main network site and restrict access to content across all of your subsites."
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:77
+msgid "Multisite Membership"
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:84
+msgid "Main Network Site Settings"
+msgstr ""
+
+#: inc/class-pmpro-manage-multisite.php:93
+msgid "Select Site"
 msgstr ""
