@@ -166,6 +166,10 @@ add_action( 'init', 'pmpro_multisite_membership_init', 15 );
 function pmpro_multisite_get_parent_site_pages() {
 	global $pmpro_pages;
 
+	if ( empty( $pmpro_pages ) ) {
+		return;
+	}
+
 	// Only if the constant is defined try to rewrite.
 	if ( ! defined( 'PMPRO_MULTISITE_REWRITE_URLS' ) ||  ! PMPRO_MULTISITE_REWRITE_URLS ) {
 		return;
@@ -216,13 +220,14 @@ add_filter( 'pmpro_url', 'pmpro_multisite_pmpro_url', 10, 4 );
 
 /**
  * Remove cron jobs from subsites to prevent them from running.
- * @since TBD
+ * @since 0.5
  */
 function pmpro_multisite_remove_crons() {
-	//bail if pmpro get crons doesn't exist
+	// Return early if PMPro is not active.
 	if ( ! function_exists( 'pmpro_get_crons' ) ) {
 		return;
 	}
+
 	$crons = apply_filters( 'pmpro_multisite_core_crons', pmpro_get_crons() );
 
 	foreach ( $crons as $hook => $cron ) {
@@ -236,10 +241,12 @@ add_action( 'admin_init', 'pmpro_multisite_remove_crons' );
 
 /**
  * Reactivate PMPro cron jobs when this plugin is deactivated.
- * @since TBD
+ * @since 0.5
  */
 function pmpro_multisite_deactivation() {
-	pmpro_maybe_schedule_crons();
+	if ( function_exists( 'pmpro_maybe_schedule_crons' ) ) {
+		pmpro_maybe_schedule_crons();
+	}
 }
 register_deactivation_hook( __FILE__, 'pmpro_multisite_deactivation' );
 
