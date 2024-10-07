@@ -63,9 +63,9 @@ class PMPro_Manage_Multisite {
 			update_site_option( 'pmpro_multisite_membership_main_db_prefix', $main_db_prefix );
 			delete_site_transient( 'pmpro_multisite_membership_main_site_id' ); // Clear the transient on save.
 			?>
-			<div class="<?php echo esc_attr( pmpro_get_element_class( "notice notice-success is-dismissible" ) ) ?>">
-		        <p><?php esc_html_e( 'The source site has been updated. Make sure that PMPro IS active on that site and the Multisite Membership Add On IS NOT active there.', 'pmpro-network-subsite' ); ?></p>
-		    </div>
+			<div id=="message" class="updated fade">
+				<p><?php esc_html_e( 'The source site has been updated. Make sure that PMPro IS active on that site and the Multisite Membership Add On IS NOT active there.', 'pmpro-network-subsite' ); ?></p>
+			</div>
 			<?php
 		}
 
@@ -74,57 +74,57 @@ class PMPro_Manage_Multisite {
 		}
 
 ?>
-
-
-<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_admin wrap' ) ); ?>">
-
-	<form id="select-site-form" action="" method="POST">
+<h1><?php esc_html_e( 'Multisite Membership', 'pmpro-network-subsite' ); ?></h1>
+<form id="select-site-form" action="" method="POST">
 	<?php wp_nonce_field( 'pmpro_multisite_membership_settings', 'pmpro_multisite_membership_settings_nonce' ); ?>
-	<h1><?php esc_html_e( 'PMPro Multisite Membership Settings', 'pmpro-network-subsite' ); ?></h1>
-		<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_section' ) ); ?>" data-visibility="hidden" data-activated="true">
-		<div id="pmpro-keap-level-settings" class="<?php echo esc_attr( pmpro_get_element_class( "pmpro_section_toggle" ) )  ?>">
-				<button class="<?php echo esc_attr( pmpro_get_element_class( "pmpro_section-toggle-button" ) ) ?>"  type="button" aria-expanded="false">
-					<span class="<?php echo esc_attr( pmpro_get_element_class( "dashicons dashicons-arrow-up-alt2" ) ) ?>"></span>
-					<?php esc_html_e( 'PMPro Multisite Membership Settings', 'pmpro-network-subsite' ); ?>
-				</button>
-		</div>
-		<div class="<?php echo esc_attr( pmpro_get_element_class( "pmpro_section_inside" ) ) ?>">
-			<div class="<?php echo esc_attr( pmpro_get_element_class( "pmpro_section-content" ) ) ?>">
-				<p><?php printf( esc_html__( 'You have activated the %s on this site, which means that you will be using PMPro settings from another site in your Network to control site access.', 'pmpro-network-subsite' ), '<strong>' . __( 'Multisite Membership Add On', 'pmpro-network-subsite' ) . '</strong>' );?></p>
-				<p><?php esc_html_e( 'Select the site you would like to get PMPro level data from and click Update.', 'pmpro-network-subsite' );?></p>
-				<div class="<?php echo esc_attr( pmpro_get_element_class( "pmpro_admin-section" ) ) ?>">
-					<div class="<?php echo esc_attr( pmpro_get_element_class("pmpro_admin-section-content" ) ) ?>">
-						<div class="<?php echo esc_attr( pmpro_get_element_class( "pmpro_admin-section-row" ) ) ?>">
-							<div class="<?php echo esc_attr( pmpro_get_element_class("pmpro_admin-section-col" ) ) ?>">
-								<label for="main_db_prefix"><?php esc_html_e( 'Select Site', 'pmpro-network-subsite' ); ?></label>
-								<select class="<?php echo esc_attr( pmpro_get_element_class( "site-dropdown-select" ) ) ?> name="main_db_prefix" id="main_db_prefix">
-								<?php
-									$sites = get_sites();
-									foreach ( $sites as $site ) {
-										$bool_val = SUBDOMAIN_INSTALL;
-										$siteurl = $bool_val ? $site->domain : $site->domain . $site->path;
-										printf(
-											'<option value="%s" %s>%s</option>',
-											$wpdb->get_blog_prefix( $site->blog_id ),
-											selected( $wpdb->get_blog_prefix($site->blog_id), pmpro_multisite_membership_get_main_db_prefix(), false ),
-											$siteurl
-										);
+	<div id="pmpro-network-subsite-level-settings" class="pmpro_section" data-visibility="show" data-activated="true">
+		<div class="pmpro_section_toggle">
+			<button class="pmpro_section-toggle-button" type="button" aria-expanded="true">
+				<span class="dashicons dashicons-arrow-up-alt2"></span>
+				<?php esc_html_e( 'Main Network Site Settings', 'pmpro-network-subsite' ); ?>
+			</button>
+		</div> <!-- end pmpro_section_toggle -->
+		<div class="pmpro_section_inside">
+			<p><?php printf( esc_html__( 'You have activated the %s on this site, which means that you will be using PMPro settings from another site in your Network to control site access.', 'pmpro-network-subsite' ), '<strong>' . __( 'Multisite Membership Add On', 'pmpro-network-subsite' ) . '</strong>' );?></p>
+			<p><?php esc_html_e( 'Select the site you would like to get PMPro level data from and click Update.', 'pmpro-network-subsite' );?></p>
+			<table class="form-table">
+				<tbody>
+					<tr>
+						<th><label for="main_db_prefix"><?php esc_html_e( 'Select Site', 'pmpro-network-subsite' ); ?></label></th>
+						<td>
+							<select name="main_db_prefix" id="main_db_prefix">
+							<?php
+								$sites = get_sites( array( 'public' => 1 ) );
+								$bool_val = SUBDOMAIN_INSTALL;
+								foreach ( $sites as $site ) {
+									var_dump( $site );
+
+									// Exclude the current site.
+									if ( $site->blog_id == get_current_blog_id() ) {
+										continue;
 									}
-								?>
-								</select>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="<?php echo esc_attr( pmpro_get_element_class( "pmpro_admin-section-row" ) ) ?>">
-		<div class="<?php echo esc_attr( pmpro_get_element_class("pmpro_admin-section-col" ) ) ?>">
-			<input type="submit" name="select-site-submit" id="select_site_submit" class="<?php echo esc_attr( pmpro_get_element_class("button-primary") ) ?> value="<?php esc_attr_e( 'Update', 'pmpro-network-subsite' ); ?> />
-		</div>
-	</div>
-</div>
+									$siteurl = $bool_val ? $site->domain : $site->domain . $site->path;
+									$subsite_name = get_blog_details( $site->blog_id )->blogname;
+									printf(
+										'<option value="%1$s" %2$s>%3$s - %4$s</option>',
+										$wpdb->get_blog_prefix( $site->blog_id ),
+										selected( $wpdb->get_blog_prefix($site->blog_id), pmpro_multisite_membership_get_main_db_prefix(), false ),
+										$subsite_name,
+										$siteurl
+									);
+								}
+							?>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="submit">
+				<input type="submit" name="select-site-submit" id="select_site_submit" class="button-primary" value="<?php esc_attr_e( 'Update', 'pmpro-network-subsite' ); ?>"/>
+			</p>
+		</div> <!-- end pmpro_section_inside -->
+	</div> <!-- end pmpro_section -->
+</div> <!-- end pmpro_admin wrap -->
 
 <?php
 		if( defined( 'PMPRO_DIR' ) ) {
