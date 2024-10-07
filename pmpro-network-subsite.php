@@ -223,7 +223,7 @@ add_filter( 'pmpro_url', 'pmpro_multisite_pmpro_url', 10, 4 );
  * @since 0.5
  */
 function pmpro_multisite_remove_crons() {
-	
+	// Return early if PMPro is not active.
 	if ( ! function_exists( 'pmpro_get_crons' ) ) {
 		return;
 	}
