@@ -24,7 +24,9 @@ class PMPro_Manage_Multisite {
 
 		// Add submenu advanced settings page.
 		add_submenu_page( 'pmpro-network-subsite', 'Settings', 'Settings', 'read', 'pmpro-network-subsite',  array( __CLASS__, 'settings_page' ) ); //Add this so we can have a menu slug for the main menu link
-		add_submenu_page( 'pmpro-network-subsite', esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-advancedsettings', 'pmpro_advancedsettings' );
+		if ( get_option( 'pmpro_multisite_advanced_settings_source', 'inherit' ) === 'custom' ) {
+			add_submenu_page( 'pmpro-network-subsite', esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-advancedsettings', 'pmpro_advancedsettings' );
+		}
 
 		// Only load the styling when we're on one of our admin pages.
 		if ( ! empty( $_REQUEST['page'] ) && ( $_REQUEST['page'] == 'pmpro-network-subsite'
@@ -62,9 +64,12 @@ class PMPro_Manage_Multisite {
 			$main_db_prefix = sanitize_text_field( $_POST['main_db_prefix'] );
 			update_site_option( 'pmpro_multisite_membership_main_db_prefix', $main_db_prefix );
 			delete_site_transient( 'pmpro_multisite_membership_main_site_id' ); // Clear the transient on save.
+
+			$advanced_settings_source = ( ! empty( $_POST['advanced_settings_source'] ) && 'custom' === $_POST['advanced_settings_source'] ) ? 'custom' : 'inherit';
+			update_option( 'pmpro_multisite_advanced_settings_source', $advanced_settings_source );
 			?>
-			<div id=="message" class="updated fade">
-				<p><?php esc_html_e( 'The source site has been updated. Make sure that PMPro IS active on that site and the Multisite Membership Add On IS NOT active there.', 'pmpro-network-subsite' ); ?></p>
+			<div id="message" class="updated fade">
+				<p><?php esc_html_e( 'Settings saved.', 'pmpro-network-subsite' ); ?></p>
 			</div>
 			<?php
 		}
@@ -75,6 +80,13 @@ class PMPro_Manage_Multisite {
 
 ?>
 <h1><?php esc_html_e( 'Multisite Membership', 'pmpro-network-subsite' ); ?></h1>
+<p>
+	<?php esc_html_e( 'For sites using WordPress multisite network, use this Add On for centralized membership checkout, login, and admin on the main network site and restrict access to content across all of your subsites.', 'pmpro-network-subsite' ); ?>
+	<?php
+	$nav_menus_link = '<a title="' . esc_attr__( 'Multisite Membership Add On Documentation', 'pmpro-network-subsite' ) . '" target="_blank" rel="nofollow noopener" href="https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/?utm_source=plugin&utm_medium=pmpro-network-subsite&utm_campaign=add-ons">' . esc_html__( 'Multisite Membership', 'pmpro-network-subsite' ) . '</a>';
+	printf( esc_html__( 'Learn more about %s.', 'pmpro-network-subsite' ), $nav_menus_link ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	?>
+</p>
 <form id="select-site-form" action="" method="POST">
 	<?php wp_nonce_field( 'pmpro_multisite_membership_settings', 'pmpro_multisite_membership_settings_nonce' ); ?>
 	<div id="pmpro-network-subsite-level-settings" class="pmpro_section" data-visibility="show" data-activated="true">
@@ -86,7 +98,6 @@ class PMPro_Manage_Multisite {
 		</div> <!-- end pmpro_section_toggle -->
 		<div class="pmpro_section_inside">
 			<p><?php printf( esc_html__( 'You have activated the %s on this site, which means that you will be using PMPro settings from another site in your Network to control site access.', 'pmpro-network-subsite' ), '<strong>' . __( 'Multisite Membership Add On', 'pmpro-network-subsite' ) . '</strong>' );?></p>
-			<p><?php esc_html_e( 'Select the site you would like to get PMPro level data from and click Update.', 'pmpro-network-subsite' );?></p>
 			<table class="form-table">
 				<tbody>
 					<tr>
@@ -97,8 +108,6 @@ class PMPro_Manage_Multisite {
 								$sites = get_sites( array( 'public' => 1 ) );
 								$bool_val = SUBDOMAIN_INSTALL;
 								foreach ( $sites as $site ) {
-									var_dump( $site );
-
 									// Exclude the current site.
 									if ( $site->blog_id == get_current_blog_id() ) {
 										continue;
@@ -115,6 +124,20 @@ class PMPro_Manage_Multisite {
 								}
 							?>
 							</select>
+							<p class="description"><?php esc_html_e( 'Select the site you would like to get PMPro level data from and click Update.', 'pmpro-network-subsite' );?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row" valign="top">
+							<label for="advanced_settings_source"><?php esc_html_e( 'Advanced Settings', 'pmpro-network-subsite' ); ?></label>
+						</th>
+						<td>
+							<?php $source = get_option( 'pmpro_multisite_advanced_settings_source', 'inherit' ); ?>
+							<select id="advanced_settings_source" name="advanced_settings_source">
+								<option value="inherit" <?php selected( $source, 'inherit' ); ?>><?php esc_html_e( 'Use main site settings', 'pmpro-network-subsite' ); ?></option>
+								<option value="custom" <?php selected( $source, 'custom' ); ?>><?php esc_html_e( 'Use custom settings for this subsite', 'pmpro-network-subsite' ); ?></option>
+							</select>
+							<p class="description"><?php esc_html_e( 'By default, subsites use the PMPro settings from the main site. To use custom settings for this subsite, change this option. A new Advanced Settings screen will appear under the Memberships menu.', 'pmpro-network-subsite' ); ?></p>
 						</td>
 					</tr>
 				</tbody>
