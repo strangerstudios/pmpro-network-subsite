@@ -66,6 +66,10 @@ function pmpro_multisite_membership_get_main_db_prefix() {
 		update_site_option( 'pmpro_multisite_membership_main_db_prefix', $main_db_prefix );
 	}
 
+	// Strip any characters that are not valid in a MySQL identifier to prevent
+	// SQL injection via a crafted prefix stored by a superadmin.
+	$main_db_prefix = preg_replace( '/[^a-zA-Z0-9_]/', '', $main_db_prefix );
+
 	return $main_db_prefix;
 }
 
@@ -101,10 +105,11 @@ function pmpro_multisite_get_advanced_settings_option_names() {
 		'pmpro_wisdom_opt_out',
 		'pmpro_hideadslevels',
 		'pmpro_redirecttosubscription',
-		'pmpro_uninstall',
 		'pmpro_avatar_enabled_sitewide',
 		'pmpro_site_type',
-		'show_avatars', // WP Discussion setting; required for any PMPro avatar display.
+		// show_avatars is a WP core Discussion setting. While in inherit mode, subsite admin
+		// changes to Settings → Discussion → Show Avatars will have no visible effect.
+		'show_avatars',
 	) );
 }
 
