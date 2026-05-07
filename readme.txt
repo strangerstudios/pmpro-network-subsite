@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, network, network membership, multisite, wpmu
 Requires at least: 5.4
-Tested up to: 6.6
-Stable tag: 0.5.3
+Tested up to: 6.9
+Stable tag: 0.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,11 @@ Please post it in the GitHub issue tracker here: https://github.com/strangerstud
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+
+= 0.6 - 2026-05-07 =
+* FEATURE: Added an option on the subsite Settings screen to inherit advanced settings from the main network site (default), or to use custom settings per subsite. #42 (@kimcoleman)
+* ENHANCEMENT: Member avatars now load from the main network site's uploads directory via the new `pmpro_avatar_basedir` and `pmpro_avatar_baseurl` filters in PMPro core. #42 (@kimcoleman)
+* BUG FIX: Removed a stray `var_dump()` and fixed a malformed `<div id=="message">` in the subsite settings page. #42 (@kimcoleman)
 
 = 0.5.3 - 2024-10-07 =
 * ENHANCEMENT: Improved settings UI for compatibility with PMPro admin screens. #38 (@MaximilianoRicoTabo, @kimcoleman)
