@@ -66,11 +66,147 @@ function pmpro_multisite_membership_get_main_db_prefix() {
 		update_site_option( 'pmpro_multisite_membership_main_db_prefix', $main_db_prefix );
 	}
 
+	// Strip any characters that are not valid in a MySQL identifier to prevent
+	// SQL injection via a crafted prefix stored by a superadmin.
+	$main_db_prefix = preg_replace( '/[^a-zA-Z0-9_]/', '', $main_db_prefix );
+
 	return $main_db_prefix;
 }
 
 include( 'inc/class-pmpro-manage-multisite.php' );
 PMPro_Manage_Multisite::init();
+
+/**
+ * Get the advanced settings source for the current subsite.
+ *
+ * @return string 'inherit' to pull from the main site, 'custom' to use per-subsite settings.
+ */
+function pmpro_multisite_get_advanced_settings_source() {
+	return get_option( 'pmpro_multisite_advanced_settings_source', 'inherit' );
+}
+
+/**
+ * The PMPro option names managed on the Advanced Settings screen.
+ * Filterable so add-ons can append their own options.
+ *
+ * @return string[]
+ */
+function pmpro_multisite_get_advanced_settings_option_names() {
+	return apply_filters( 'pmpro_multisite_advanced_settings_options', array(
+		'pmpro_hide_toolbar',
+		'pmpro_block_dashboard',
+		'pmpro_filterqueries',
+		'pmpro_showexcerpts',
+		'pmpro_nonmembertext',
+		'pmpro_maxnotificationpriority',
+		'pmpro_activity_email_frequency',
+		'pmpro_business_address',
+		'pmpro_hideads',
+		'pmpro_wisdom_opt_out',
+		'pmpro_hideadslevels',
+		'pmpro_redirecttosubscription',
+		'pmpro_avatar_enabled_sitewide',
+		'pmpro_site_type',
+		// show_avatars is a WP core Discussion setting. While in inherit mode, subsite admin
+		// changes to Settings → Discussion → Show Avatars will have no visible effect.
+		'show_avatars',
+	) );
+}
+
+/**
+ * When "inherit" mode is active, register pre_option_* filters that read each
+ * Advanced Settings option directly from the main site's options table.
+ * Using pre_option_* + a direct DB read avoids any get_blog_option() recursion.
+ */
+function pmpro_multisite_register_advanced_settings_inheritance() {
+	if ( pmpro_multisite_get_advanced_settings_source() !== 'inherit' ) {
+		return;
+	}
+
+	$main_db_prefix = pmpro_multisite_membership_get_main_db_prefix();
+	if ( empty( $main_db_prefix ) ) {
+		return;
+	}
+
+	foreach ( pmpro_multisite_get_advanced_settings_option_names() as $option_name ) {
+		add_filter(
+			'pre_option_' . $option_name,
+			static function() use ( $main_db_prefix, $option_name ) {
+				global $wpdb;
+				$row = $wpdb->get_row(
+					$wpdb->prepare(
+						"SELECT option_value FROM `{$main_db_prefix}options` WHERE option_name = %s LIMIT 1",
+						$option_name
+					)
+				);
+				if ( is_object( $row ) ) {
+					return maybe_unserialize( $row->option_value );
+				}
+				return false;
+			}
+		);
+	}
+
+	// pmpro_filterqueries is read at plugin-load time in content.php (global scope, before
+	// pre_option_* filters can intercept it). Correct the resulting pre_get_posts hook on
+	// init priority 1, before any queries run.
+	add_action( 'init', static function() use ( $main_db_prefix ) {
+		global $wpdb;
+		remove_filter( 'pre_get_posts', 'pmpro_search_filter' );
+		$row = $wpdb->get_row( $wpdb->prepare(
+			"SELECT option_value FROM `{$main_db_prefix}options` WHERE option_name = %s LIMIT 1",
+			'pmpro_filterqueries'
+		) );
+		if ( is_object( $row ) && ! empty( $row->option_value ) ) {
+			add_filter( 'pre_get_posts', 'pmpro_search_filter' );
+		}
+	}, 1 );
+
+	// Avatars are uploaded to the main site. Point PMPro's avatar path helpers at the
+	// main site's upload directory via dedicated filters added to PMPro core.
+	add_filter( 'pmpro_avatar_basedir', 'pmpro_multisite_avatar_basedir' );
+	add_filter( 'pmpro_avatar_baseurl', 'pmpro_multisite_avatar_baseurl' );
+}
+add_action( 'plugins_loaded', 'pmpro_multisite_register_advanced_settings_inheritance', 20 );
+
+/**
+ * Get the main site's upload directory info, cached for the request.
+ *
+ * @return array wp_upload_dir() result for the main site.
+ */
+function pmpro_multisite_get_main_upload_dir() {
+	static $main_upload = null;
+
+	if ( null === $main_upload ) {
+		switch_to_blog( pmpro_multisite_get_main_site_ID() );
+		$main_upload = wp_upload_dir();
+		restore_current_blog();
+	}
+
+	return $main_upload;
+}
+
+/**
+ * Redirect PMPro avatar basedir to the main site's uploads directory.
+ *
+ * @param string $basedir The current basedir.
+ * @return string The main site's basedir.
+ */
+function pmpro_multisite_avatar_basedir( $basedir ) {
+	$main_upload = pmpro_multisite_get_main_upload_dir();
+	return $main_upload['basedir'];
+}
+
+/**
+ * Redirect PMPro avatar baseurl to the main site's uploads URL.
+ *
+ * @param string $baseurl The current baseurl.
+ * @return string The main site's baseurl.
+ */
+function pmpro_multisite_avatar_baseurl( $baseurl ) {
+	$main_upload = pmpro_multisite_get_main_upload_dir();
+	return $main_upload['baseurl'];
+}
 
 // Load text domain
 function pmpro_multisite_membership_load_textdomain() {
