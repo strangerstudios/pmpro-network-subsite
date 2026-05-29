@@ -147,7 +147,7 @@ class PMPro_Manage_Multisite {
 			</p>
 		</div> <!-- end pmpro_section_inside -->
 	</div> <!-- end pmpro_section -->
-</div> <!-- end pmpro_admin wrap -->
+</form> <!-- end form -->
 
 <?php
 		if( defined( 'PMPRO_DIR' ) ) {
