@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, network, network membership, multisite, wpmu
 Requires at least: 5.4
-Tested up to: 6.9
-Stable tag: 0.6
+Tested up to: 7.0
+Stable tag: 0.6.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,9 @@ Please post it in the GitHub issue tracker here: https://github.com/strangerstud
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+
+= 0.6.1 - 2026-06-30 =
+* BUG FIX: Fixed the footer message appearing inside the content area on the plugin's settings page due to an unclosed form tag. #44 (@kimwhite)
 
 = 0.6 - 2026-05-07 =
 * FEATURE: Added an option on the subsite Settings screen to inherit advanced settings from the main network site (default), or to use custom settings per subsite. #42 (@kimcoleman)
