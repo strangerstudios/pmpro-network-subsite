@@ -376,6 +376,64 @@ function pmpro_multisite_remove_crons() {
 add_action( 'admin_init', 'pmpro_multisite_remove_crons' );
 
 /**
+ * Prevent PMPro's recurring Action Scheduler tasks from being scheduled on subsites.
+ *
+ * Since PMPro 3.5, the recurring tasks that used to be WP-Cron jobs (membership expirations,
+ * expiration reminders, recurring payment reminders, admin activity emails, etc.) run through
+ * Action Scheduler in the 'pmpro_recurring_tasks' group. Action Scheduler is per-site, so without
+ * this every subsite would run those tasks against the shared membership tables. The main site
+ * runs them for the whole network.
+ *
+ * @since TBD
+ *
+ * @param int|null $pre       Null to let Action Scheduler schedule the action, or an action ID to short-circuit.
+ * @param int      $timestamp When the action will run.
+ * @param string   $hook      Action hook.
+ * @param array    $args      Action arguments.
+ * @param string   $group     Action group.
+ * @return int|null
+ */
+function pmpro_multisite_block_recurring_single_action( $pre, $timestamp, $hook, $args, $group ) {
+	return 'pmpro_recurring_tasks' === $group ? 0 : $pre;
+}
+add_filter( 'pre_as_schedule_single_action', 'pmpro_multisite_block_recurring_single_action', 10, 5 );
+
+/**
+ * Prevent PMPro's recurring Action Scheduler tasks from being scheduled on subsites.
+ *
+ * @since TBD
+ *
+ * @param int|null $pre                 Null to let Action Scheduler schedule the action, or an action ID to short-circuit.
+ * @param int      $timestamp           When the action will first run.
+ * @param int      $interval_in_seconds How long to wait between runs.
+ * @param string   $hook                Action hook.
+ * @param array    $args                Action arguments.
+ * @param string   $group               Action group.
+ * @return int|null
+ */
+function pmpro_multisite_block_recurring_action( $pre, $timestamp, $interval_in_seconds, $hook, $args, $group ) {
+	return 'pmpro_recurring_tasks' === $group ? 0 : $pre;
+}
+add_filter( 'pre_as_schedule_recurring_action', 'pmpro_multisite_block_recurring_action', 10, 6 );
+
+/**
+ * Clear any PMPro recurring tasks that were already scheduled on this subsite.
+ *
+ * Runs once per site. The filters above keep new ones from being scheduled after that.
+ *
+ * @since TBD
+ */
+function pmpro_multisite_clear_recurring_tasks() {
+	if ( ! class_exists( 'PMPro_Action_Scheduler' ) || get_option( 'pmpro_multisite_recurring_tasks_cleared' ) ) {
+		return;
+	}
+
+	PMPro_Action_Scheduler::clear_recurring_tasks();
+	update_option( 'pmpro_multisite_recurring_tasks_cleared', 1, false );
+}
+add_action( 'action_scheduler_init', 'pmpro_multisite_clear_recurring_tasks', 20 );
+
+/**
  * Reactivate PMPro cron jobs when this plugin is deactivated.
  * @since 0.5
  */
@@ -383,6 +441,10 @@ function pmpro_multisite_deactivation() {
 	if ( function_exists( 'pmpro_maybe_schedule_crons' ) ) {
 		pmpro_maybe_schedule_crons();
 	}
+
+	// PMPro reschedules its recurring Action Scheduler tasks on its own once our filters are gone.
+	// Forget that we cleared them so they are cleared again if this plugin is reactivated.
+	delete_option( 'pmpro_multisite_recurring_tasks_cleared' );
 }
 register_deactivation_hook( __FILE__, 'pmpro_multisite_deactivation' );
 
