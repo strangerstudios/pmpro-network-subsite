@@ -394,6 +394,11 @@ add_action( 'admin_init', 'pmpro_multisite_remove_crons' );
  * @return int|null
  */
 function pmpro_multisite_block_recurring_single_action( $pre, $timestamp, $hook, $args, $group ) {
+	// The main site is the one that should run these tasks for the network.
+	if ( is_main_site() ) {
+		return $pre;
+	}
+
 	return 'pmpro_recurring_tasks' === $group ? 0 : $pre;
 }
 add_filter( 'pre_as_schedule_single_action', 'pmpro_multisite_block_recurring_single_action', 10, 5 );
@@ -412,6 +417,11 @@ add_filter( 'pre_as_schedule_single_action', 'pmpro_multisite_block_recurring_si
  * @return int|null
  */
 function pmpro_multisite_block_recurring_action( $pre, $timestamp, $interval_in_seconds, $hook, $args, $group ) {
+	// The main site is the one that should run these tasks for the network.
+	if ( is_main_site() ) {
+		return $pre;
+	}
+
 	return 'pmpro_recurring_tasks' === $group ? 0 : $pre;
 }
 add_filter( 'pre_as_schedule_recurring_action', 'pmpro_multisite_block_recurring_action', 10, 6 );
@@ -424,7 +434,8 @@ add_filter( 'pre_as_schedule_recurring_action', 'pmpro_multisite_block_recurring
  * @since TBD
  */
 function pmpro_multisite_clear_recurring_tasks() {
-	if ( ! class_exists( 'PMPro_Action_Scheduler' ) || get_option( 'pmpro_multisite_recurring_tasks_cleared' ) ) {
+	// Never clear the main site's tasks, even if this plugin is activated there by mistake.
+	if ( is_main_site() || ! class_exists( 'PMPro_Action_Scheduler' ) || get_option( 'pmpro_multisite_recurring_tasks_cleared' ) ) {
 		return;
 	}
 
