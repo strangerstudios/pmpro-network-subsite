@@ -427,20 +427,32 @@ function pmpro_multisite_block_recurring_action( $pre, $timestamp, $interval_in_
 add_filter( 'pre_as_schedule_recurring_action', 'pmpro_multisite_block_recurring_action', 10, 6 );
 
 /**
- * Clear any PMPro recurring tasks that were already scheduled on this subsite.
+ * Cancel any PMPro recurring tasks that are pending on this subsite.
  *
- * Runs once per site. The filters above keep new ones from being scheduled after that.
+ * The filters above keep new tasks from being scheduled, but they do not catch tasks that were
+ * scheduled before this plugin was active, or the next run that Action Scheduler stores when a
+ * recurring task finishes. So check for a pending task on every load and cancel the group if one is found.
  *
  * @since TBD
  */
 function pmpro_multisite_clear_recurring_tasks() {
 	// Never clear the main site's tasks, even if this plugin is activated there by mistake.
-	if ( is_main_site() || ! class_exists( 'PMPro_Action_Scheduler' ) || get_option( 'pmpro_multisite_recurring_tasks_cleared' ) ) {
+	if ( is_main_site() || ! class_exists( 'PMPro_Action_Scheduler' ) || ! function_exists( 'as_unschedule_all_actions' ) ) {
 		return;
 	}
 
-	PMPro_Action_Scheduler::clear_recurring_tasks();
-	update_option( 'pmpro_multisite_recurring_tasks_cleared', 1, false );
+	$pending = as_get_scheduled_actions(
+		array(
+			'group'    => 'pmpro_recurring_tasks',
+			'status'   => ActionScheduler_Store::STATUS_PENDING,
+			'per_page' => 1,
+		),
+		'ids'
+	);
+
+	if ( ! empty( $pending ) ) {
+		as_unschedule_all_actions( '', array(), 'pmpro_recurring_tasks' );
+	}
 }
 add_action( 'action_scheduler_init', 'pmpro_multisite_clear_recurring_tasks', 20 );
 
@@ -452,10 +464,6 @@ function pmpro_multisite_deactivation() {
 	if ( function_exists( 'pmpro_maybe_schedule_crons' ) ) {
 		pmpro_maybe_schedule_crons();
 	}
-
-	// PMPro reschedules its recurring Action Scheduler tasks on its own once our filters are gone.
-	// Forget that we cleared them so they are cleared again if this plugin is reactivated.
-	delete_option( 'pmpro_multisite_recurring_tasks_cleared' );
 }
 register_deactivation_hook( __FILE__, 'pmpro_multisite_deactivation' );
 
