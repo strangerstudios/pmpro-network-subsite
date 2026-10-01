@@ -29,8 +29,9 @@ class PMPro_Manage_Multisite {
 		}
 
 		// Only load the styling when we're on one of our admin pages.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only check of the current admin page to decide whether to print CSS.
 		if ( ! empty( $_REQUEST['page'] ) && ( $_REQUEST['page'] == 'pmpro-network-subsite'
-			|| $_REQUEST['page'] == 'pmpro-advancedsettings' ) ) {
+			|| $_REQUEST['page'] == 'pmpro-advancedsettings' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page check.
 			//Include css/admin.css
 		?>
 		<style>
@@ -128,7 +129,7 @@ class PMPro_Manage_Multisite {
 			</button>
 		</div> <!-- end pmpro_section_toggle -->
 		<div class="pmpro_section_inside">
-			<p><?php printf( esc_html__( 'You have activated the %s on this site, which means that you will be using PMPro settings from another site in your Network to control site access.', 'pmpro-network-subsite' ), '<strong>' . __( 'Multisite Membership Add On', 'pmpro-network-subsite' ) . '</strong>' );?></p>
+			<p><?php printf( esc_html__( 'You have activated the %s on this site, which means that you will be using PMPro settings from another site in your Network to control site access.', 'pmpro-network-subsite' ), '<strong>' . esc_html__( 'Multisite Membership Add On', 'pmpro-network-subsite' ) . '</strong>' );?></p>
 			<table class="form-table">
 				<tbody>
 					<tr>
@@ -152,10 +153,10 @@ class PMPro_Manage_Multisite {
 									$subsite_name = get_blog_details( $site->blog_id )->blogname;
 									printf(
 										'<option value="%1$s" %2$s>%3$s - %4$s</option>',
-										$wpdb->get_blog_prefix( $site->blog_id ),
-										selected( $wpdb->get_blog_prefix($site->blog_id), pmpro_multisite_membership_get_main_db_prefix(), false ),
-										$subsite_name,
-										$siteurl
+										esc_attr( $wpdb->get_blog_prefix( $site->blog_id ) ),
+										selected( $wpdb->get_blog_prefix($site->blog_id), pmpro_multisite_membership_get_main_db_prefix(), false ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- selected() returns a fixed attribute string.
+										esc_html( $subsite_name ),
+										esc_html( $siteurl )
 									);
 								}
 

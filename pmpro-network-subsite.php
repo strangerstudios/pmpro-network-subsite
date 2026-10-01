@@ -10,6 +10,10 @@
  * Domain Path: /languages
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Deactivate this plugin automatically if we're not on a multisite installation.
  */
@@ -61,7 +65,7 @@ function pmpro_multisite_membership_get_main_db_prefix() {
 			$main_db_prefix = PMPRO_NETWORK_MAIN_DB_PREFIX . '_';		//when we used constants, the trailing _ wasn't included
 		} else {
 			global $wpdb, $current_site;
-			$main_db_prefix = $wpdb->get_blog_prefix( $wpdb->get_var( $wpdb->prepare ( "SELECT blogs.blog_id FROM $wpdb->blogs blogs WHERE blogs.domain = '%s' AND blogs.path = '%s' ORDER BY blogs.blog_id ASC LIMIT 1", $current_site->domain, $current_site->path ) ) );
+			$main_db_prefix = $wpdb->get_blog_prefix( $wpdb->get_var( $wpdb->prepare ( "SELECT blogs.blog_id FROM $wpdb->blogs blogs WHERE blogs.domain = %s AND blogs.path = %s ORDER BY blogs.blog_id ASC LIMIT 1", $current_site->domain, $current_site->path ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time lookup of the main site ID in the core blogs table; the result is saved as a site option.
 		}
 		update_site_option( 'pmpro_multisite_membership_main_db_prefix', $main_db_prefix );
 	}
@@ -133,9 +137,10 @@ function pmpro_multisite_register_advanced_settings_inheritance() {
 			'pre_option_' . $option_name,
 			static function() use ( $main_db_prefix, $option_name ) {
 				global $wpdb;
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Direct read of the main site's options table avoids get_blog_option() recursion; $main_db_prefix is stripped to [a-zA-Z0-9_] in pmpro_multisite_membership_get_main_db_prefix().
 				$row = $wpdb->get_row(
 					$wpdb->prepare(
-						"SELECT option_value FROM `{$main_db_prefix}options` WHERE option_name = %s LIMIT 1",
+						"SELECT option_value FROM `{$main_db_prefix}options` WHERE option_name = %s LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table prefix is stripped to [a-zA-Z0-9_]; the value is a placeholder.
 						$option_name
 					)
 				);
@@ -153,8 +158,9 @@ function pmpro_multisite_register_advanced_settings_inheritance() {
 	add_action( 'init', static function() use ( $main_db_prefix ) {
 		global $wpdb;
 		remove_filter( 'pre_get_posts', 'pmpro_search_filter' );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Direct read of the main site's options table; $main_db_prefix is stripped to [a-zA-Z0-9_] in pmpro_multisite_membership_get_main_db_prefix().
 		$row = $wpdb->get_row( $wpdb->prepare(
-			"SELECT option_value FROM `{$main_db_prefix}options` WHERE option_name = %s LIMIT 1",
+			"SELECT option_value FROM `{$main_db_prefix}options` WHERE option_name = %s LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table prefix is stripped to [a-zA-Z0-9_]; the value is a placeholder.
 			'pmpro_filterqueries'
 		) );
 		if ( is_object( $row ) && ! empty( $row->option_value ) ) {
