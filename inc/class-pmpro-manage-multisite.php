@@ -66,8 +66,9 @@ class PMPro_Manage_Multisite {
 			if ( isset( $_POST['main_db_prefix'] ) && current_user_can( 'manage_network_options' ) ) {
 				$main_db_prefix = sanitize_text_field( wp_unslash( $_POST['main_db_prefix'] ) );
 
-				// Only accept the prefix of a site from the Select Site list.
-				$main_db_prefix_valid = false;
+				// Accept the stored source site unchanged, even if it isn't in the Select Site list.
+				// Otherwise, only accept the prefix of a site from the Select Site list.
+				$main_db_prefix_valid = ( $main_db_prefix === pmpro_multisite_membership_get_main_db_prefix() );
 				foreach ( get_sites( array( 'public' => 1 ) ) as $site ) {
 					if ( (int) $site->blog_id !== get_current_blog_id() && $wpdb->get_blog_prefix( $site->blog_id ) === $main_db_prefix ) {
 						$main_db_prefix_valid = true;
@@ -137,10 +138,15 @@ class PMPro_Manage_Multisite {
 							<?php
 								$sites = get_sites( array( 'public' => 1 ) );
 								$bool_val = SUBDOMAIN_INSTALL;
+								$stored_main_db_prefix = pmpro_multisite_membership_get_main_db_prefix();
+								$stored_main_db_prefix_listed = false;
 								foreach ( $sites as $site ) {
 									// Exclude the current site.
 									if ( $site->blog_id == get_current_blog_id() ) {
 										continue;
+									}
+									if ( $wpdb->get_blog_prefix( $site->blog_id ) === $stored_main_db_prefix ) {
+										$stored_main_db_prefix_listed = true;
 									}
 									$siteurl = $bool_val ? $site->domain : $site->domain . $site->path;
 									$subsite_name = get_blog_details( $site->blog_id )->blogname;
@@ -150,6 +156,16 @@ class PMPro_Manage_Multisite {
 										selected( $wpdb->get_blog_prefix($site->blog_id), pmpro_multisite_membership_get_main_db_prefix(), false ),
 										$subsite_name,
 										$siteurl
+									);
+								}
+
+								// Always show the stored source site so that saving this form doesn't change it.
+								if ( ! $stored_main_db_prefix_listed ) {
+									printf(
+										'<option value="%1$s" selected="selected">%2$s</option>',
+										esc_attr( $stored_main_db_prefix ),
+										/* translators: %s: database table prefix of the stored source site. */
+										esc_html( sprintf( __( 'Current setting (database prefix: %s)', 'pmpro-network-subsite' ), $stored_main_db_prefix ) )
 									);
 								}
 							?>
