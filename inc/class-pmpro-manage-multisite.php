@@ -23,7 +23,7 @@ class PMPro_Manage_Multisite {
 		add_menu_page( esc_html__( 'Settings', 'pmpro-network-subsite' ), esc_html__( 'Memberships', 'pmpro-network-subsite' ), 'manage_options', 'pmpro-network-subsite', array( __CLASS__, 'settings_page' ), 'dashicons-groups' );
 
 		// Add submenu advanced settings page.
-		add_submenu_page( 'pmpro-network-subsite', 'Settings', 'Settings', 'read', 'pmpro-network-subsite',  array( __CLASS__, 'settings_page' ) ); //Add this so we can have a menu slug for the main menu link
+		add_submenu_page( 'pmpro-network-subsite', 'Settings', 'Settings', 'manage_options', 'pmpro-network-subsite',  array( __CLASS__, 'settings_page' ) ); //Add this so we can have a menu slug for the main menu link
 		if ( get_option( 'pmpro_multisite_advanced_settings_source', 'inherit' ) === 'custom' ) {
 			add_submenu_page( 'pmpro-network-subsite', esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), esc_html__( 'Advanced Settings', 'pmpro-multisite-membership' ), 'manage_options', 'pmpro-advancedsettings', 'pmpro_advancedsettings' );
 		}
@@ -61,18 +61,49 @@ class PMPro_Manage_Multisite {
 		global $wpdb;
 
 		// Process the form.
-		if( isset( $_POST['main_db_prefix'] ) && check_admin_referer( 'pmpro_multisite_membership_settings', 'pmpro_multisite_membership_settings_nonce' ) ) {
-			$main_db_prefix = sanitize_text_field( wp_unslash( $_POST['main_db_prefix'] ) );
-			update_site_option( 'pmpro_multisite_membership_main_db_prefix', $main_db_prefix );
-			delete_site_transient( 'pmpro_multisite_membership_main_site_id' ); // Clear the transient on save.
+		if( isset( $_POST['pmpro_multisite_membership_settings_nonce'] ) && check_admin_referer( 'pmpro_multisite_membership_settings', 'pmpro_multisite_membership_settings_nonce' ) ) {
+			// The source site is a network-wide setting, so only network admins can change it.
+			$main_db_prefix_error = false;
+			if ( isset( $_POST['main_db_prefix'] ) && current_user_can( 'manage_network_options' ) ) {
+				$main_db_prefix = sanitize_text_field( wp_unslash( $_POST['main_db_prefix'] ) );
 
-			$advanced_settings_source = ( ! empty( $_POST['advanced_settings_source'] ) && 'custom' === $_POST['advanced_settings_source'] ) ? 'custom' : 'inherit';
-			update_option( 'pmpro_multisite_advanced_settings_source', $advanced_settings_source );
-			?>
-			<div id="message" class="updated fade">
-				<p><?php esc_html_e( 'Settings saved.', 'pmpro-network-subsite' ); ?></p>
-			</div>
-			<?php
+				// Accept the stored source site unchanged, even if it isn't in the Select Site list.
+				// Otherwise, only accept the prefix of a site from the Select Site list.
+				$main_db_prefix_valid = ( $main_db_prefix === pmpro_multisite_membership_get_main_db_prefix() );
+				foreach ( get_sites( array( 'public' => 1 ) ) as $site ) {
+					if ( (int) $site->blog_id !== get_current_blog_id() && $wpdb->get_blog_prefix( $site->blog_id ) === $main_db_prefix ) {
+						$main_db_prefix_valid = true;
+						break;
+					}
+				}
+
+				if ( $main_db_prefix_valid ) {
+					update_site_option( 'pmpro_multisite_membership_main_db_prefix', $main_db_prefix );
+					delete_site_transient( 'pmpro_multisite_membership_main_site_id' ); // Clear the transient on save.
+				} else {
+					$main_db_prefix_error = true;
+				}
+			}
+
+			// The advanced settings source is a per-site setting.
+			if ( current_user_can( 'manage_options' ) ) {
+				$advanced_settings_source = ( ! empty( $_POST['advanced_settings_source'] ) && 'custom' === $_POST['advanced_settings_source'] ) ? 'custom' : 'inherit';
+				update_option( 'pmpro_multisite_advanced_settings_source', $advanced_settings_source );
+			}
+
+			if ( $main_db_prefix_error ) {
+				?>
+				<div class="error">
+					<p><?php esc_html_e( 'The selected site is not valid, so the Select Site setting was not changed. Your other settings were saved.', 'pmpro-network-subsite' ); ?></p>
+				</div>
+				<?php
+			} else {
+				?>
+				<div id="message" class="updated fade">
+					<p><?php esc_html_e( 'Settings saved.', 'pmpro-network-subsite' ); ?></p>
+				</div>
+				<?php
+			}
 		}
 
 		if( defined( 'PMPRO_DIR' ) ) {
@@ -104,14 +135,19 @@ class PMPro_Manage_Multisite {
 					<tr>
 						<th><label for="main_db_prefix"><?php esc_html_e( 'Select Site', 'pmpro-network-subsite' ); ?></label></th>
 						<td>
-							<select name="main_db_prefix" id="main_db_prefix">
+							<select name="main_db_prefix" id="main_db_prefix" <?php disabled( ! current_user_can( 'manage_network_options' ) ); ?>>
 							<?php
 								$sites = get_sites( array( 'public' => 1 ) );
 								$bool_val = SUBDOMAIN_INSTALL;
+								$stored_main_db_prefix = pmpro_multisite_membership_get_main_db_prefix();
+								$stored_main_db_prefix_listed = false;
 								foreach ( $sites as $site ) {
 									// Exclude the current site.
 									if ( $site->blog_id == get_current_blog_id() ) {
 										continue;
+									}
+									if ( $wpdb->get_blog_prefix( $site->blog_id ) === $stored_main_db_prefix ) {
+										$stored_main_db_prefix_listed = true;
 									}
 									$siteurl = $bool_val ? $site->domain : $site->domain . $site->path;
 									$subsite_name = get_blog_details( $site->blog_id )->blogname;
@@ -123,9 +159,23 @@ class PMPro_Manage_Multisite {
 										esc_html( $siteurl )
 									);
 								}
+
+								// Always show the stored source site so that saving this form doesn't change it.
+								if ( ! $stored_main_db_prefix_listed ) {
+									printf(
+										'<option value="%1$s" selected="selected">%2$s</option>',
+										esc_attr( $stored_main_db_prefix ),
+										/* translators: %s: database table prefix of the stored source site. */
+										esc_html( sprintf( __( 'Current setting (database prefix: %s)', 'pmpro-network-subsite' ), $stored_main_db_prefix ) )
+									);
+								}
 							?>
 							</select>
-							<p class="description"><?php esc_html_e( 'Select the site you would like to get PMPro level data from and click Update.', 'pmpro-network-subsite' );?></p>
+							<?php if ( current_user_can( 'manage_network_options' ) ) { ?>
+								<p class="description"><?php esc_html_e( 'Select the site you would like to get PMPro level data from and click Update.', 'pmpro-network-subsite' );?></p>
+							<?php } else { ?>
+								<p class="description"><?php esc_html_e( 'This setting applies to the whole network. Only a network administrator can change it.', 'pmpro-network-subsite' ); ?></p>
+							<?php } ?>
 						</td>
 					</tr>
 					<tr>
