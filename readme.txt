@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, network, network membership, multisite, wpmu
 Requires at least: 5.4
-Tested up to: 7.0
-Stable tag: 0.6.1
+Tested up to: 7.1
+Stable tag: 0.6.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,13 @@ Please post it in the GitHub issue tracker here: https://github.com/strangerstud
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+
+= 0.6.2 - 2026-10-01 =
+* SECURITY: Improved sanitization and escaping throughout the plugin to resolve Plugin Check security findings. #46 (@dparker1005)
+* SECURITY: Only network administrators can now change the network-wide source site on the Memberships > Settings screen. Subsite administrators can no longer change the source site, but can still choose whether their subsite uses the main site's Advanced Settings or custom settings. #47 (@dparker1005)
+* SECURITY: The source site setting now only accepts a site from the Select Site list. #47 (@dparker1005)
+* BUG FIX: PMPro's recurring Action Scheduler tasks, such as membership expirations and reminder emails, no longer run on subsites, since the main site already runs them for the whole network. Custom code and Add Ons hooked to the `pmpro_schedule_*` hooks no longer run on subsites, and subsite admins no longer receive the admin activity email. #45 (@dparker1005)
+* BUG FIX: Fixed an issue where saving the Memberships > Settings screen could change the network-wide source site when the current source site was not shown in the Select Site list. #47 (@dparker1005)
 
 = 0.6.1 - 2026-06-30 =
 * BUG FIX: Fixed the footer message appearing inside the content area on the plugin's settings page due to an unclosed form tag. #44 (@kimwhite)

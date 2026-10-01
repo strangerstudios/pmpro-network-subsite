@@ -3,7 +3,7 @@
  * Plugin Name: Paid Memberships Pro - Multisite Membership Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/
  * Description: Centralize membership checkout, login, and admin on the main network site and restrict access to content across all of your subsites.
- * Version: 0.6.1
+ * Version: 0.6.2
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
  * Text Domain: pmpro-network-subsite
@@ -390,7 +390,7 @@ add_action( 'admin_init', 'pmpro_multisite_remove_crons' );
  * this every subsite would run those tasks against the shared membership tables. The main site
  * runs them for the whole network.
  *
- * @since TBD
+ * @since 0.6.2
  *
  * @param int|null $pre       Null to let Action Scheduler schedule the action, or an action ID to short-circuit.
  * @param int      $timestamp When the action will run.
@@ -412,7 +412,7 @@ add_filter( 'pre_as_schedule_single_action', 'pmpro_multisite_block_recurring_si
 /**
  * Prevent PMPro's recurring Action Scheduler tasks from being scheduled on subsites.
  *
- * @since TBD
+ * @since 0.6.2
  *
  * @param int|null $pre                 Null to let Action Scheduler schedule the action, or an action ID to short-circuit.
  * @param int      $timestamp           When the action will first run.
@@ -439,7 +439,7 @@ add_filter( 'pre_as_schedule_recurring_action', 'pmpro_multisite_block_recurring
  * scheduled before this plugin was active, or the next run that Action Scheduler stores when a
  * recurring task finishes. So check for a pending task on every load and cancel the group if one is found.
  *
- * @since TBD
+ * @since 0.6.2
  */
 function pmpro_multisite_clear_recurring_tasks() {
 	// Never clear the main site's tasks, even if this plugin is activated there by mistake.
