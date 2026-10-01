@@ -92,15 +92,16 @@ class PMPro_Manage_Multisite {
 			if ( $main_db_prefix_error ) {
 				?>
 				<div class="error">
-					<p><?php esc_html_e( 'The selected site is not valid. The Select Site setting was not changed.', 'pmpro-network-subsite' ); ?></p>
+					<p><?php esc_html_e( 'The selected site is not valid, so the Select Site setting was not changed. Your other settings were saved.', 'pmpro-network-subsite' ); ?></p>
+				</div>
+				<?php
+			} else {
+				?>
+				<div id="message" class="updated fade">
+					<p><?php esc_html_e( 'Settings saved.', 'pmpro-network-subsite' ); ?></p>
 				</div>
 				<?php
 			}
-			?>
-			<div id="message" class="updated fade">
-				<p><?php esc_html_e( 'Settings saved.', 'pmpro-network-subsite' ); ?></p>
-			</div>
-			<?php
 		}
 
 		if( defined( 'PMPRO_DIR' ) ) {
