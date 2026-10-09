@@ -302,6 +302,29 @@ function pmpro_multisite_membership_init() {
 add_action( 'init', 'pmpro_multisite_membership_init', 15 );
 
 /**
+ * Redirect setup wizard requests to the Multisite Membership settings page.
+ */
+function pmpro_multisite_redirect_from_setup_wizard() {
+	global $plugin_page;
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	if ( ! get_option( 'pmpro_wizard_redirect' ) && 'pmpro-wizard' !== $plugin_page ) {
+		return;
+	}
+
+	// Clear the pending redirect before redirecting to avoid a loop.
+	delete_option( 'pmpro_wizard_redirect' );
+	wp_safe_redirect( admin_url( 'admin.php?page=pmpro-network-subsite' ) );
+	exit;
+}
+add_action( 'admin_init', 'pmpro_multisite_redirect_from_setup_wizard', 5 );
+// WordPress checks access to the unregistered wizard page before admin_init.
+add_action( 'admin_page_access_denied', 'pmpro_multisite_redirect_from_setup_wizard' );
+
+/**
  * Replace the global $pmpro_pages with the page ID's of the main network site.
  * @return array $pmpro_pages The array of page ID's for the main network site.
  */
