@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, network, network membership, multisite, wpmu
 Requires at least: 5.4
 Tested up to: 7.1
-Stable tag: 0.6.2
+Stable tag: 0.6.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,10 @@ Please post it in the GitHub issue tracker here: https://github.com/strangerstud
 Please visit our premium support site at http://www.paidmembershipspro.com for more documentation and our support forums.
 
 == Changelog ==
+
+= 0.6.3 - 2026-11-19 =
+* BUG FIX: Fixed an issue where administrators were sent to an inaccessible Setup Wizard after activating PMPro on a subsite. They are now redirected to the Multisite Membership settings page. #48 (@dparker1005)
+* BUG FIX: Fixed an issue where PMPro's recurring tasks kept running on the network's main site instead of the selected source site when the two were different. #50 (@dparker1005)
 
 = 0.6.2 - 2026-10-01 =
 * SECURITY: Improved sanitization and escaping throughout the plugin to resolve Plugin Check security findings. #46 (@dparker1005)

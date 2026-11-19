@@ -3,7 +3,7 @@
  * Plugin Name: Paid Memberships Pro - Multisite Membership Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-network-membership/
  * Description: Centralize membership checkout, login, and admin on the main network site and restrict access to content across all of your subsites.
- * Version: 0.6.2
+ * Version: 0.6.3
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
  * Text Domain: pmpro-network-subsite
@@ -416,7 +416,7 @@ add_action( 'admin_init', 'pmpro_multisite_remove_crons' );
  * The source site may not be the network's main site. Falls back to is_main_site() if the
  * source site can't be found.
  *
- * @since TBD
+ * @since 0.6.3
  *
  * @return bool
  */
