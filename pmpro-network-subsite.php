@@ -499,7 +499,10 @@ register_deactivation_hook( __FILE__, 'pmpro_multisite_deactivation' );
  */
 function pmpro_multisite_get_main_site_ID() {
 	global $wpdb;
-	if ( ! get_site_transient( 'pmpro_multisite_membership_main_site_id' ) ) {
+	$main_site_id = get_site_transient( 'pmpro_multisite_membership_main_site_id' );
+
+	// A cached 0 means no site matched the prefix, so only look up the site again on a cache miss.
+	if ( false === $main_site_id ) {
 		$prefix = pmpro_multisite_membership_get_main_db_prefix();
 		$main_site_id = 0;
 		
@@ -516,8 +519,6 @@ function pmpro_multisite_get_main_site_ID() {
 
 		// Set the transient here for a really long time, we clean it up anyway.
 		set_site_transient( 'pmpro_multisite_membership_main_site_id', $main_site_id, YEAR_IN_SECONDS );
-	} else {
-		$main_site_id = get_site_transient( 'pmpro_multisite_membership_main_site_id' );
 	}
 
 	return (int) $main_site_id;
