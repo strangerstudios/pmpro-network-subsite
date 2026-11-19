@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Multisite Membership Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Multisite Membership Add On 0.6.2\n"
+"Project-Id-Version: Paid Memberships Pro - Multisite Membership Add On 0.6.3\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-01T16:53:31+00:00\n"
+"POT-Creation-Date: 2026-11-19T17:18:35+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-network-subsite\n"
@@ -101,6 +101,7 @@ msgstr ""
 #: pmpro-network-subsite.php:290
 #: pmpro-network-subsite.php:426
 #: pmpro-network-subsite.php:513
+#: pmpro-network-subsite.php:562
 msgid "View Documentation"
 msgstr ""
 
@@ -109,6 +110,7 @@ msgstr ""
 #: pmpro-network-subsite.php:290
 #: pmpro-network-subsite.php:426
 #: pmpro-network-subsite.php:513
+#: pmpro-network-subsite.php:562
 msgid "Docs"
 msgstr ""
 
@@ -117,6 +119,7 @@ msgstr ""
 #: pmpro-network-subsite.php:291
 #: pmpro-network-subsite.php:427
 #: pmpro-network-subsite.php:514
+#: pmpro-network-subsite.php:563
 msgid "Visit Customer Support Forum"
 msgstr ""
 
@@ -125,6 +128,7 @@ msgstr ""
 #: pmpro-network-subsite.php:291
 #: pmpro-network-subsite.php:427
 #: pmpro-network-subsite.php:514
+#: pmpro-network-subsite.php:563
 msgid "Support"
 msgstr ""
 
