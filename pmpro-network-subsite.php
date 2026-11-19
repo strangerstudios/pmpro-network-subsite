@@ -411,12 +411,31 @@ function pmpro_multisite_remove_crons() {
 add_action( 'admin_init', 'pmpro_multisite_remove_crons' );
 
 /**
+ * Check whether the current site is the membership source site selected in the settings.
+ *
+ * The source site may not be the network's main site. Falls back to is_main_site() if the
+ * source site can't be found.
+ *
+ * @since TBD
+ *
+ * @return bool
+ */
+function pmpro_multisite_is_source_site() {
+	$source_site_id = pmpro_multisite_get_main_site_ID();
+	if ( empty( $source_site_id ) ) {
+		return is_main_site();
+	}
+
+	return get_current_blog_id() === $source_site_id;
+}
+
+/**
  * Prevent PMPro's recurring Action Scheduler tasks from being scheduled on subsites.
  *
  * Since PMPro 3.5, the recurring tasks that used to be WP-Cron jobs (membership expirations,
  * expiration reminders, recurring payment reminders, admin activity emails, etc.) run through
  * Action Scheduler in the 'pmpro_recurring_tasks' group. Action Scheduler is per-site, so without
- * this every subsite would run those tasks against the shared membership tables. The main site
+ * this every subsite would run those tasks against the shared membership tables. The source site
  * runs them for the whole network.
  *
  * @since 0.6.2
@@ -429,8 +448,8 @@ add_action( 'admin_init', 'pmpro_multisite_remove_crons' );
  * @return int|null
  */
 function pmpro_multisite_block_recurring_single_action( $pre, $timestamp, $hook, $args, $group ) {
-	// The main site is the one that should run these tasks for the network.
-	if ( is_main_site() ) {
+	// The source site is the one that should run these tasks for the network.
+	if ( pmpro_multisite_is_source_site() ) {
 		return $pre;
 	}
 
@@ -452,8 +471,8 @@ add_filter( 'pre_as_schedule_single_action', 'pmpro_multisite_block_recurring_si
  * @return int|null
  */
 function pmpro_multisite_block_recurring_action( $pre, $timestamp, $interval_in_seconds, $hook, $args, $group ) {
-	// The main site is the one that should run these tasks for the network.
-	if ( is_main_site() ) {
+	// The source site is the one that should run these tasks for the network.
+	if ( pmpro_multisite_is_source_site() ) {
 		return $pre;
 	}
 
@@ -471,8 +490,8 @@ add_filter( 'pre_as_schedule_recurring_action', 'pmpro_multisite_block_recurring
  * @since 0.6.2
  */
 function pmpro_multisite_clear_recurring_tasks() {
-	// Never clear the main site's tasks, even if this plugin is activated there by mistake.
-	if ( is_main_site() || ! class_exists( 'PMPro_Action_Scheduler' ) || ! function_exists( 'as_unschedule_all_actions' ) ) {
+	// Never clear the source site's tasks, even if this plugin is activated there by mistake.
+	if ( pmpro_multisite_is_source_site() || ! class_exists( 'PMPro_Action_Scheduler' ) || ! function_exists( 'as_unschedule_all_actions' ) ) {
 		return;
 	}
 
@@ -509,7 +528,10 @@ register_deactivation_hook( __FILE__, 'pmpro_multisite_deactivation' );
  */
 function pmpro_multisite_get_main_site_ID() {
 	global $wpdb;
-	if ( ! get_site_transient( 'pmpro_multisite_membership_main_site_id' ) ) {
+	$main_site_id = get_site_transient( 'pmpro_multisite_membership_main_site_id' );
+
+	// A cached 0 means no site matched the prefix, so only look up the site again on a cache miss.
+	if ( false === $main_site_id ) {
 		$prefix = pmpro_multisite_membership_get_main_db_prefix();
 		$main_site_id = 0;
 		
@@ -526,8 +548,6 @@ function pmpro_multisite_get_main_site_ID() {
 
 		// Set the transient here for a really long time, we clean it up anyway.
 		set_site_transient( 'pmpro_multisite_membership_main_site_id', $main_site_id, YEAR_IN_SECONDS );
-	} else {
-		$main_site_id = get_site_transient( 'pmpro_multisite_membership_main_site_id' );
 	}
 
 	return (int) $main_site_id;
