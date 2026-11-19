@@ -317,6 +317,12 @@ function pmpro_multisite_redirect_from_setup_wizard() {
 
 	// Clear the pending redirect before redirecting to avoid a loop.
 	delete_option( 'pmpro_wizard_redirect' );
+
+	// Already on the settings page, so there is nowhere to redirect.
+	if ( 'pmpro-network-subsite' === $plugin_page ) {
+		return;
+	}
+
 	wp_safe_redirect( admin_url( 'admin.php?page=pmpro-network-subsite' ) );
 	exit;
 }
