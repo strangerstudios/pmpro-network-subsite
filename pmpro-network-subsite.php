@@ -318,8 +318,8 @@ function pmpro_multisite_redirect_from_setup_wizard() {
 	// Clear the pending redirect before redirecting to avoid a loop.
 	delete_option( 'pmpro_wizard_redirect' );
 
-	// Already on the settings page, so there is nowhere to redirect.
-	if ( 'pmpro-network-subsite' === $plugin_page ) {
+	// Already on one of this Add On's settings pages, so there is nowhere to redirect.
+	if ( in_array( $plugin_page, array( 'pmpro-network-subsite', 'pmpro-advancedsettings' ), true ) ) {
 		return;
 	}
 
