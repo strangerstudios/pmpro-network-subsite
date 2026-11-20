@@ -283,6 +283,10 @@ function pmpro_multisite_membership_init() {
 	remove_action( 'show_user_profile', 'pmpro_membership_level_profile_fields' );
 	remove_action( 'edit_user_profile', 'pmpro_membership_level_profile_fields' );
 	remove_action( 'profile_update', 'pmpro_membership_level_profile_fields_update' );
+	remove_action( 'show_user_profile', 'pmpro_membership_levels_table_on_profile' );
+	remove_action( 'edit_user_profile', 'pmpro_membership_levels_table_on_profile' );
+	remove_action( 'show_user_profile', 'pmpro_add_edit_member_link_on_profile' );
+	remove_action( 'edit_user_profile', 'pmpro_add_edit_member_link_on_profile' );
 
 	// update wpdb tables again
 	global $wpdb;
