@@ -382,6 +382,12 @@ function pmpro_multisite_pmpro_url( $url, $page, $querystring, $scheme ) {
 		if ( $page == $page_slug && ! empty( $page_id ) ) {
 			// Add query arg to the URL 
 			$url = add_query_arg( 'page_id', $page_id, $main_site_url);
+
+			// Keep the query string passed to pmpro_url() (e.g. the checkout level), as core does.
+			parse_str( (string) $querystring, $query_args );
+			if ( ! empty( $query_args ) ) {
+				$url = esc_url_raw( add_query_arg( $query_args, $url ) );
+			}
 		}
 	}
 	return $url;
