@@ -405,10 +405,11 @@ function pmpro_multisite_remove_crons() {
 		wp_clear_scheduled_hook( $hook );
 	}
 
-	// Remove the cron jobs from the main site too.
+	// Stop core from rescheduling the crons when WP-Cron checks for ready jobs.
 	remove_filter( 'pre_get_ready_cron_jobs', 'pmpro_handle_schedule_crons_on_cron_ready_check' );
 }
-add_action( 'admin_init', 'pmpro_multisite_remove_crons' );
+// Run on init so front-end and WP-Cron requests are covered too, not just admin requests.
+add_action( 'init', 'pmpro_multisite_remove_crons' );
 
 /**
  * Check whether the current site is the membership source site selected in the settings.
