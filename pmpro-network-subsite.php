@@ -167,13 +167,14 @@ function pmpro_multisite_register_advanced_settings_inheritance() {
 			add_filter( 'pre_get_posts', 'pmpro_search_filter' );
 		}
 	}, 1 );
-
-	// Avatars are uploaded to the main site. Point PMPro's avatar path helpers at the
-	// main site's upload directory via dedicated filters added to PMPro core.
-	add_filter( 'pmpro_avatar_basedir', 'pmpro_multisite_avatar_basedir' );
-	add_filter( 'pmpro_avatar_baseurl', 'pmpro_multisite_avatar_baseurl' );
 }
 add_action( 'plugins_loaded', 'pmpro_multisite_register_advanced_settings_inheritance', 20 );
+
+// Avatars are uploaded to the main site. Point PMPro's avatar path helpers at the
+// main site's upload directory via dedicated filters added to PMPro core.
+// This applies whether Advanced Settings are inherited or customized, since avatars belong to the user.
+add_filter( 'pmpro_avatar_basedir', 'pmpro_multisite_avatar_basedir' );
+add_filter( 'pmpro_avatar_baseurl', 'pmpro_multisite_avatar_baseurl' );
 
 /**
  * Get the main site's upload directory info, cached for the request.
